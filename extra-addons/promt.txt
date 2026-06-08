@@ -1,0 +1,10 @@
+Hazme un modulo de destion avicola para odoo con las siguintes funciones
+
+Salida de aves:
+Aves listas para salir al matadero
+
+Distribucion de pollitos:
+Lotes de pollos de la incubadora que saldria a cada granja
+
+Granjas de pollo engorde:
+Registro de las granjas de pollo engorde, pueden ser propias y alquiladas, ademas tambien tienes que gestionar el numero de galpones, metros cudrados de los galpones y la densidad de pollos por metros cuadrado.

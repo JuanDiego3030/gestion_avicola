@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_avicola_granja,avicola.granja,model_avicola_granja,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_galpon,avicola.galpon,model_avicola_galpon,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_distribucion,avicola.distribucion,model_avicola_distribucion,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_salida,avicola.salida,model_avicola_salida,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_dashboard,avicola.dashboard,model_avicola_dashboard,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_mortalidad,avicola.mortalidad,model_avicola_mortalidad,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_veterinario,avicola.veterinario,model_avicola_veterinario,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_plan_vacunacion,avicola.plan.vacunacion,model_avicola_plan_vacunacion,gestion_avicola.group_veterinario,1,1,1,1

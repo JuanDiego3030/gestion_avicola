@@ -1,0 +1,19 @@
+/* Dashboard styles */
+.avicola-charts-row { margin-top: 24px; }
+.avicola-chart-card {
+    background-color: #ffffff10;
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 260px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.avicola-chart-title { color: #e9b3f0; font-weight: 700; margin-bottom: 8px; }
+.avicola-kpi-card .card-body { min-height: 160px; }
+
+/* Make canvases responsive */
+.avicola-chart-canvas { width: 100% !important; height: 220px !important; }
+
+/* Small adjustments for the dashboard look */
+.avicola-dashboard-view .o_form_sheet_bg, .avicola-dashboard-view .o_form_sheet, .avicola-dashboard-view .o_form_view {
+    background-color: #1a1924 !important;
+}

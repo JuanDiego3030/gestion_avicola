@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======== GRANJA ======== -->
+    <record id="view_avicola_granja_list" model="ir.ui.view">
+        <field name="name">avicola.granja.list</field>
+        <field name="model">avicola.granja</field>
+        <field name="arch" type="xml">
+            <list string="Granjas">
+                <field name="name"/>
+                <field name="tipo"/>
+                <field name="ubicacion"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_granja_form" model="ir.ui.view">
+        <field name="name">avicola.granja.form</field>
+        <field name="model">avicola.granja</field>
+        <field name="arch" type="xml">
+            <form string="Granja">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="tipo"/>
+                        <field name="ubicacion"/>
+                    </group>
+                    <notebook>
+                        <page string="Galpones">
+                            <field name="galpon_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="metros_cuadrados"/>
+                                    <field name="capacidad_maxima"/>
+                                    <field name="cantidad_actual"/>
+                                    <field name="densidad_actual"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_granja" model="ir.actions.act_window">
+        <field name="name">Granjas</field>
+        <field name="res_model">avicola.granja</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ======== GALPON ======== -->
+    <record id="view_avicola_galpon_list" model="ir.ui.view">
+        <field name="name">avicola.galpon.list</field>
+        <field name="model">avicola.galpon</field>
+        <field name="arch" type="xml">
+            <list string="Galpones">
+                <field name="granja_id"/>
+                <field name="name"/>
+                <field name="metros_cuadrados"/>
+                <field name="capacidad_maxima"/>
+                <field name="cantidad_actual"/>
+                <field name="densidad_actual"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_galpon_form" model="ir.ui.view">
+        <field name="name">avicola.galpon.form</field>
+        <field name="model">avicola.galpon</field>
+        <field name="arch" type="xml">
+            <form string="Galpón">
+                <sheet>
+                    <group>
+                        <field name="granja_id"/>
+                        <field name="name"/>
+                        <field name="metros_cuadrados"/>
+                        <field name="capacidad_maxima"/>
+                        <field name="cantidad_actual"/>
+                        <field name="densidad_actual" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_galpon" model="ir.actions.act_window">
+        <field name="name">Galpones</field>
+        <field name="res_model">avicola.galpon</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ======== DISTRIBUCION ======== -->
+    <record id="view_avicola_distribucion_list" model="ir.ui.view">
+        <field name="name">avicola.distribucion.list</field>
+        <field name="model">avicola.distribucion</field>
+        <field name="arch" type="xml">
+            <list string="Distribuciones" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+                <field name="lote_incubadora"/>
+                <field name="fecha"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="cantidad"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_distribucion_form" model="ir.ui.view">
+        <field name="name">avicola.distribucion.form</field>
+        <field name="model">avicola.distribucion</field>
+        <field name="arch" type="xml">
+            <form string="Distribución de Pollitos">
+                <header>
+                    <button name="action_confirmar" string="Confirmar" type="object"
+                            class="btn-primary" invisible="estado == 'confirmado'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="estado == 'borrador'"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="lote_incubadora"/>
+                        <field name="fecha"/>
+                        <field name="granja_id"/>
+                        <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                        <field name="cantidad"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_distribucion" model="ir.actions.act_window">
+        <field name="name">Distribución de Pollitos</field>
+        <field name="res_model">avicola.distribucion</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_avicola_mortalidad_list" model="ir.ui.view">
+        <field name="name">avicola.mortalidad.list</field>
+        <field name="model">avicola.mortalidad</field>
+        <field name="arch" type="xml">
+            <list string="Mortalidad de Aves" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+                <field name="lote_incubadora"/>
+                <field name="fecha"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="cantidad"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_mortalidad_form" model="ir.ui.view">
+        <field name="name">avicola.mortalidad.form</field>
+        <field name="model">avicola.mortalidad</field>
+        <field name="arch" type="xml">
+            <form string="Registro de Mortalidad">
+                <header>
+                    <button name="action_confirmar" string="Confirmar" type="object" class="btn-primary" invisible="estado == 'confirmado'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object" invisible="estado == 'borrador'"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="lote_incubadora" readonly="1"/>
+                        <field name="fecha"/>
+                        <field name="granja_id"/>
+                        <field name="galpon_id" domain="[('granja_id', '=', granja_id), ('cantidad_actual', '>', 0)]"/>
+                        <field name="cantidad"/>
+                        <field name="observaciones"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_mortalidad" model="ir.actions.act_window">
+        <field name="name">Mortalidad de Aves</field>
+        <field name="res_model">avicola.mortalidad</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_avicola_veterinario_list" model="ir.ui.view">
+        <field name="name">avicola.veterinario.list</field>
+        <field name="model">avicola.veterinario</field>
+        <field name="arch" type="xml">
+            <list string="Veterinarios">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="granja_ids"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_veterinario_form" model="ir.ui.view">
+        <field name="name">avicola.veterinario.form</field>
+        <field name="model">avicola.veterinario</field>
+        <field name="arch" type="xml">
+            <form string="Veterinario">
+                <sheet>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="granja_ids" widget="many2many_tags"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_veterinario" model="ir.actions.act_window">
+        <field name="name">Veterinarios</field>
+        <field name="res_model">avicola.veterinario</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_avicola_plan_vacunacion_list" model="ir.ui.view">
+        <field name="name">avicola.plan.vacunacion.list</field>
+        <field name="model">avicola.plan.vacunacion</field>
+        <field name="arch" type="xml">
+            <list string="Planificaciones de Vacunación">
+                <field name="name"/>
+                <field name="veterinario_id"/>
+                <field name="granja_id"/>
+                <field name="fecha_planificada"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_plan_vacunacion_form" model="ir.ui.view">
+        <field name="name">avicola.plan.vacunacion.form</field>
+        <field name="model">avicola.plan.vacunacion</field>
+        <field name="arch" type="xml">
+            <form string="Planificación de Vacunación">
+                <header>
+                    <button name="action_programar" string="Programar" type="object" class="btn-primary"
+                            invisible="state != 'borrador'"/>
+                    <button name="action_realizar" string="Marcar Realizado" type="object" class="btn-success"
+                            invisible="state == 'realizado'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador,programado,realizado"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="veterinario_id"/>
+                        <field name="granja_id"/>
+                        <field name="fecha_planificada"/>
+                        <field name="descripcion"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_plan_vacunacion" model="ir.actions.act_window">
+        <field name="name">Planificaciones de Vacunación</field>
+        <field name="res_model">avicola.plan.vacunacion</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ======== SALIDA ======== -->
+    <record id="view_avicola_salida_list" model="ir.ui.view">
+        <field name="name">avicola.salida.list</field>
+        <field name="model">avicola.salida</field>
+        <field name="arch" type="xml">
+            <list string="Salidas a Matadero" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+                <field name="fecha"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="cantidad"/>
+                <field name="peso_total"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_salida_form" model="ir.ui.view">
+        <field name="name">avicola.salida.form</field>
+        <field name="model">avicola.salida</field>
+        <field name="arch" type="xml">
+            <form string="Salida a Matadero">
+                <header>
+                    <button name="action_confirmar" string="Confirmar" type="object"
+                            class="btn-primary" invisible="estado == 'confirmado'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="estado == 'borrador'"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="fecha"/>
+                        <field name="granja_id"/>
+                        <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                        <field name="cantidad"/>
+                        <field name="peso_total"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_salida" model="ir.actions.act_window">
+        <field name="name">Salidas a Matadero</field>
+        <field name="res_model">avicola.salida</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ======== DASHBOARD MEJORADO ======== -->
+    <record id="view_avicola_dashboard_form" model="ir.ui.view">
+        <field name="name">avicola.dashboard.form</field>
+        <field name="model">avicola.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Panel de Control Avícola" class="avicola-dashboard-view" create="false" edit="false" delete="false">
+                <sheet style="max-width: 100% !important; width: 100% !important; background-color: #1a1924 !important; color: #ffffff; min-height: 100vh; padding: 24px; margin: 0 !important;">
+                    
+                    <!-- Truco CSS Inyectado para romper el contenedor blanco de Odoo y añadir efectos de transición -->
+                    <style>
+                        .avicola-dashboard-view .o_form_sheet_bg { background-color: #1a1924 !important; background: #1a1924 !important; padding: 0 !important; }
+                        .avicola-dashboard-view .o_form_sheet { border: none !important; box-shadow: none !important; max-width: 100% !important; background-color: #1a1924 !important; }
+                        .avicola-dashboard-view .o_form_view { background-color: #1a1924 !important; }
+                        .avicola-kpi-card { transition: all 0.25s ease-in-out; border: 1px solid #432447 !important; cursor: pointer; }
+                        .avicola-kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.5) !important; filter: brightness(1.15); }
+                        .avicola-btn-filter { border: 1px solid #58245c !important; color: #e2ccde !important; font-weight: 500; transition: all 0.2s; }
+                        .avicola-btn-filter:hover { background-color: #431b47 !important; color: #fff !important; }
+                        .avicola-btn-active { background-color: #722f77 !important; color: #ffffff !important; box-shadow: 0 0 10px rgba(114,47,119,0.5); }
+                    </style>
+
+                    <!-- Cabecera de Filtros -->
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #282636;">
+                        <h2 style="color: #ffffff; font-weight: 700; margin: 0; letter-spacing: 0.5px;">Panel de Control General</h2>
+                        <div class="btn-group" role="group" style="border-radius: 8px; overflow: hidden;">
+                            <button type="object" name="action_refresh_metrics" class="btn avicola-btn-filter avicola-btn-active" style="padding: 8px 20px;">Hoy</button>
+                            <button type="object" name="action_refresh_metrics" class="btn avicola-btn-filter" style="padding: 8px 20px;">Esta Semana</button>
+                            <button type="object" name="action_refresh_metrics" class="btn avicola-btn-filter" style="padding: 8px 20px;">Este Mes</button>
+                            <button type="object" name="action_refresh_metrics" class="btn avicola-btn-filter" style="padding: 8px 20px;">Hasta Ahora</button>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Tarjetas (KPIs) -->
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                        
+                        <!-- Tarjeta 1: Granjas -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-home"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="total_granjas"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Total Granjas</p>
+                                    <button name="action_open_granjas" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small style-hover" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Detalles →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 2: Galpones -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-building-o"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="total_galpones"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Galpones Activos</p>
+                                    <button name="action_open_galpones" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Detalles →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 3: Población total de Aves -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-twitter"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="total_aves"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Población Actual Aves</p>
+                                    <button name="action_open_galpones" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Inventario →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 4: Veterinarios -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-user-md"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="total_veterinarios"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Veterinarios Activos</p>
+                                    <button name="action_open_veterinarios" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Veterinarios →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 5: Ingresos / Distribución -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-truck"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="total_ingresos_pollitos"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Pollitos Ingresados</p>
+                                    <button name="action_open_distribuciones" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Historial →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 6: Salidas a Matadero -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-sign-out"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="total_salidas_matadero"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Aves Sacrificadas</p>
+                                    <button name="action_open_salidas" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Salidas →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 7: Peso Total Despachado -->
+                        <div class="col">
+                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                                <div class="card-body d-flex flex-column justify-content-between p-4">
+                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-balance-scale"/></div>
+                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><field name="peso_total_despachado"/></h1>
+                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Total Kilos Vendidos</p>
+                                    <button name="action_open_salidas" type="object" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Rendimiento →</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Gráficas interactivas -->
+                    <div class="avicola-charts-row">
+                        <div class="row g-4">
+                            <div class="col-12 col-md-6">
+                                <div class="avicola-chart-card">
+                                    <div class="avicola-chart-title">Aves por Galpón</div>
+                                    <div class="mb-3">
+                                        <select id="avicola-granja-select" class="form-select form-select-sm" style="max-width: 280px;">
+                                            <option value="">Selecciona una granja...</option>
+                                        </select>
+                                    </div>
+                                    <canvas id="chart_galpones" class="avicola-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="avicola-chart-card">
+                                    <div class="avicola-chart-title">Densidad por Galpón (aves/m²)</div>
+                                    <canvas id="chart_densidades" class="avicola-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="avicola-chart-card">
+                                    <div class="avicola-chart-title">Distribución de Aves</div>
+                                    <canvas id="chart_pie" class="avicola-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript"><![CDATA[
+                    (function () {
+                        window.avicolaDashboardInlineLoaded = true;
+                        console.log('Dashboard inline script running');
+                        function loadChartJs(callback) {
+                            console.log('Dashboard loadChartJs start');
+                            if (window.Chart) { console.log('Chart.js already loaded'); callback(); return; }
+                            var script = document.createElement('script');
+                            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+                            script.onload = function () {
+                                console.log('Chart.js loaded');
+                                callback();
+                            };
+                            script.onerror = function () {
+                                console.error('No se pudo cargar Chart.js desde CDN.');
+                            };
+                            document.head.appendChild(script);
+                        }
+
+                        function rpcCall(model, method, args, kwargs) {
+                            var url = '/web/dataset/call_kw';
+                            console.log('Dashboard RPC url:', url, 'model:', model, 'method:', method, 'args:', args);
+                            return fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json; charset=utf-8',
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0',
+                                    method: 'call',
+                                    params: {
+                                        model: model,
+                                        method: method,
+                                        args: args,
+                                        kwargs: kwargs || {}
+                                    }
+                                })
+                            }).then(function (response) {
+                                if (!response.ok) {
+                                    throw new Error('HTTP ' + response.status + ' ' + response.statusText);
+                                }
+                                return response.json();
+                            }).then(function (json) {
+                                if (json.error) {
+                                    throw new Error(json.error.data.message || 'RPC error');
+                                }
+                                return json.result;
+                            });
+                        }
+
+                        function showChartError(message) {
+                            window.avicolaDashboardInlineLoaded = true;
+                            var ids = ['chart_galpones', 'chart_densidades', 'chart_pie'];
+                            ids.forEach(function (chartId) {
+                                var ctx = document.getElementById(chartId);
+                                if (!ctx || !ctx.parentElement) {
+                                    return;
+                                }
+                                var existing = ctx.parentElement.querySelector('.dashboard-error');
+                                if (existing) {
+                                    existing.textContent = message;
+                                    return;
+                                }
+                                var errorTag = document.createElement('div');
+                                errorTag.className = 'dashboard-error';
+                                errorTag.style.color = '#ff6b6b';
+                                errorTag.style.padding = '10px 0 0';
+                                errorTag.style.fontSize = '0.95rem';
+                                errorTag.textContent = message;
+                                ctx.parentElement.appendChild(errorTag);
+                            });
+                        }
+
+                        function renderOverviewCharts() {
+                            var domain = [];
+                            if (availableGranjaIds.length) {
+                                domain = [['granja_id', 'in', availableGranjaIds]];
+                            }
+                            rpcCall('avicola.galpon', 'search_read', [domain, ['cantidad_actual', 'metros_cuadrados', 'granja_id']])
+                                .then(function (data) {
+                                    var farms = {};
+                                    data.forEach(function (row) {
+                                        var farm = (row.granja_id && row.granja_id[1]) || 'Sin Granja';
+                                        if (!farms[farm]) {
+                                            farms[farm] = { aves: 0, metros: 0 };
+                                        }
+                                        farms[farm].aves += row.cantidad_actual || 0;
+                                        farms[farm].metros += row.metros_cuadrados || 0;
+                                    });
+
+                                    var labels = Object.keys(farms);
+                                    var aves = labels.map(function (farm) { return farms[farm].aves; });
+                                    var densities = labels.map(function (farm) {
+                                        return farms[farm].metros > 0
+                                            ? farms[farm].aves / farms[farm].metros
+                                            : 0;
+                                    });
+                                    var palette = ['#722f77', '#5c2261', '#e9b3f0', '#dcb3e3', '#bca0bf'];
+
+                                    if (chartDensidades) { chartDensidades.destroy(); }
+                                    if (chartPie) { chartPie.destroy(); }
+
+                                    var ctxB = document.getElementById('chart_densidades');
+                                    if (ctxB) {
+                                        chartDensidades = new Chart(ctxB.getContext('2d'), {
+                                            type: 'line',
+                                            data: {
+                                                labels: labels,
+                                                datasets: [{
+                                                    label: 'Densidad por Granja',
+                                                    data: densities,
+                                                    borderColor: '#e9b3f0',
+                                                    backgroundColor: 'rgba(233,179,240,0.2)',
+                                                    tension: 0.3
+                                                }]
+                                            },
+                                            options: { responsive: true, maintainAspectRatio: false }
+                                        });
+                                    }
+
+                                    var ctxC = document.getElementById('chart_pie');
+                                    if (ctxC) {
+                                        chartPie = new Chart(ctxC.getContext('2d'), {
+                                            type: 'bar',
+                                            data: {
+                                                labels: labels,
+                                                datasets: [{
+                                                    label: 'Aves por Granja',
+                                                    data: aves,
+                                                    backgroundColor: labels.map(function (_, i) {
+                                                        return palette[i % palette.length];
+                                                    })
+                                                }]
+                                            },
+                                            options: { responsive: true, maintainAspectRatio: false }
+                                        });
+                                    }
+                                }).catch(function (err) {
+                                    console.error('Error RPC al obtener galpones', err);
+                                    showChartError('Error cargando datos: ' + (err.message || err));
+                                });
+                        }
+
+                        var chartGalpones = null;
+                        var chartDensidades = null;
+                        var chartPie = null;
+                        var selectedGranjaId = null;
+                        var availableGranjaIds = [];
+                        var granjaSelect = null;
+
+                        function updateChartObjects(newGalpones, newDensidades, newLabels) {
+                            if (chartGalpones) { chartGalpones.destroy(); }
+                            if (chartDensidades) { chartDensidades.destroy(); }
+                            if (chartPie) { chartPie.destroy(); }
+
+                            var ctxA = document.getElementById('chart_galpones');
+                            var ctxB = document.getElementById('chart_densidades');
+                            var ctxC = document.getElementById('chart_pie');
+                            var palette = ['#722f77', '#5c2261', '#e9b3f0', '#dcb3e3', '#bca0bf'];
+
+                            if (ctxA) {
+                                chartGalpones = new Chart(ctxA.getContext('2d'), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: newLabels,
+                                        datasets: [{
+                                            label: 'Aves por Galpón',
+                                            data: newGalpones,
+                                            backgroundColor: '#722f77'
+                                        }]
+                                    },
+                                    options: { responsive: true, maintainAspectRatio: false }
+                                });
+                            }
+                            if (ctxB) {
+                                chartDensidades = new Chart(ctxB.getContext('2d'), {
+                                    type: 'line',
+                                    data: {
+                                        labels: newLabels,
+                                        datasets: [{
+                                            label: 'Densidad (aves/m²)',
+                                            data: newDensidades,
+                                            borderColor: '#e9b3f0',
+                                            backgroundColor: 'rgba(233,179,240,0.15)',
+                                            tension: 0.3
+                                        }]
+                                    },
+                                    options: { responsive: true, maintainAspectRatio: false }
+                                });
+                            }
+                            if (ctxC) {
+                                chartPie = new Chart(ctxC.getContext('2d'), {
+                                    type: 'pie',
+                                    data: {
+                                        labels: newLabels,
+                                        datasets: [{
+                                            data: newGalpones,
+                                            backgroundColor: newLabels.map(function (_, i) {
+                                                return palette[i % palette.length];
+                                            })
+                                        }]
+                                    },
+                                    options: { responsive: true, maintainAspectRatio: false }
+                                });
+                            }
+                        }
+
+                        function refreshCharts() {
+                            var domain = [];
+                            if (selectedGranjaId) {
+                                domain = [['granja_id', '=', parseInt(selectedGranjaId, 10)]];
+                            }
+                            rpcCall('avicola.galpon', 'search_read', [domain, ['name', 'cantidad_actual', 'metros_cuadrados']])
+                                .then(function (data) {
+                                    var labels = data.map(function (d) { return d.name || 'Sin Nombre'; });
+                                    var counts = data.map(function (d) { return d.cantidad_actual || 0; });
+                                    if (chartGalpones) { chartGalpones.destroy(); }
+                                    var ctxA = document.getElementById('chart_galpones');
+                                    if (ctxA) {
+                                        chartGalpones = new Chart(ctxA.getContext('2d'), {
+                                            type: 'bar',
+                                            data: {
+                                                labels: labels,
+                                                datasets: [{
+                                                    label: 'Aves por Galpón',
+                                                    data: counts,
+                                                    backgroundColor: '#722f77'
+                                                }]
+                                            },
+                                            options: { responsive: true, maintainAspectRatio: false }
+                                        });
+                                    }
+                                }).catch(function (err) {
+                                    console.error('Error RPC al obtener galpones', err);
+                                    showChartError('Error cargando datos: ' + (err.message || err));
+                                });
+                        }
+
+                        function loadGranjas() {
+                            rpcCall('avicola.dashboard', 'get_available_granjas', [], {})
+                                .then(function (granjas) {
+                                    availableGranjaIds = granjas.map(function (granja) { return granja.id; });
+                                    granjaSelect = document.getElementById('avicola-granja-select');
+                                    if (!granjaSelect) {
+                                        return;
+                                    }
+                                    granjaSelect.innerHTML = '<option value="">Selecciona una granja...</option>';
+                                    granjas.forEach(function (granja) {
+                                        var opt = document.createElement('option');
+                                        opt.value = granja.id;
+                                        opt.textContent = granja.name;
+                                        granjaSelect.appendChild(opt);
+                                    });
+
+                                    if (granjas.length === 1) {
+                                        selectedGranjaId = granjas[0].id;
+                                        granjaSelect.value = selectedGranjaId;
+                                    }
+
+                                    granjaSelect.addEventListener('change', function () {
+                                        selectedGranjaId = this.value;
+                                        refreshCharts();
+                                    });
+
+                                    renderOverviewCharts();
+                                    refreshCharts();
+                                }).catch(function (err) {
+                                    console.error('Error RPC al obtener granjas', err);
+                                    showChartError('Error cargando granjas: ' + (err.message || err));
+                                });
+                        }
+
+                        loadChartJs(loadGranjas);
+                    })();
+                    ]]></script>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Assets moved to __manifest__.py to avoid load-time XML inheritance issues -->
+
+    <!-- Acción del Servidor -->
+    <record id="action_avicola_dashboard" model="ir.actions.server">
+        <field name="name">Dashboard</field>
+        <field name="model_id" ref="model_avicola_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Dashboard Avícola',
+    'res_model': 'avicola.dashboard',
+    'view_mode': 'form',
+    'res_id': env['avicola.dashboard'].search([], limit=1).id or env['avicola.dashboard'].create({}).id,
+    'target': 'current',
+    'flags': {'initial_mode': 'view'}
+}
+        </field>
+    </record>
+
+    <!-- ======== MENU ======== -->
+    <menuitem id="menu_avicola_root" name="Gestión Avícola" sequence="10"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager"/>
+
+    <menuitem id="menu_avicola_dashboard" name="Dashboard"
+              parent="menu_avicola_root" action="action_avicola_dashboard" sequence="5"/>
+
+    <menuitem id="menu_avicola_config" name="Configuración"
+              parent="menu_avicola_root" sequence="20"/>
+    <menuitem id="menu_avicola_granja" name="Granjas"
+              parent="menu_avicola_config" action="action_avicola_granja" sequence="10"/>
+    <menuitem id="menu_avicola_galpon" name="Galpones"
+              parent="menu_avicola_config" action="action_avicola_galpon" sequence="20"/>
+
+    <menuitem id="menu_avicola_operaciones" name="Operaciones"
+              parent="menu_avicola_root" sequence="30"/>
+    <menuitem id="menu_avicola_distribucion" name="Distribución de Pollitos"
+              parent="menu_avicola_operaciones" action="action_avicola_distribucion" sequence="10"/>
+    <menuitem id="menu_avicola_mortalidad" name="Mortalidad de Aves"
+              parent="menu_avicola_operaciones" action="action_avicola_mortalidad" sequence="15"/>
+    <menuitem id="menu_avicola_salida" name="Salidas a Matadero"
+              parent="menu_avicola_operaciones" action="action_avicola_salida" sequence="20"/>
+    <menuitem id="menu_avicola_veterinario" name="Veterinarios"
+              parent="menu_avicola_operaciones" action="action_avicola_veterinario" sequence="25"/>
+    <menuitem id="menu_avicola_plan_vacunacion" name="Planificaciones de Vacunación"
+              parent="menu_avicola_operaciones" action="action_avicola_plan_vacunacion" sequence="30"/>
+
+</odoo>
