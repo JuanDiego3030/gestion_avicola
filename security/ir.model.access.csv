@@ -7,3 +7,4 @@ access_avicola_dashboard,avicola.dashboard,model_avicola_dashboard,gestion_avico
 access_avicola_mortalidad,avicola.mortalidad,model_avicola_mortalidad,gestion_avicola.group_veterinario,1,1,1,1
 access_avicola_veterinario,avicola.veterinario,model_avicola_veterinario,gestion_avicola.group_veterinario,1,1,1,1
 access_avicola_plan_vacunacion,avicola.plan.vacunacion,model_avicola_plan_vacunacion,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_despacho,avicola.despacho,model_avicola_despacho,gestion_avicola.group_veterinario,1,1,1,1
