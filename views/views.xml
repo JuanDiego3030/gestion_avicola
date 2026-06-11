@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- ======== MENU (defined early to satisfy parent references) ======== -->
+    <menuitem id="menu_avicola_root" name="Gestión Avícola" sequence="10"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+
+    <menuitem id="menu_avicola_dashboard" name="Dashboard"
+              parent="menu_avicola_root" action="action_avicola_dashboard_window" sequence="5"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+
+    <menuitem id="menu_avicola_config" name="Configuración"
+              parent="menu_avicola_root" sequence="20"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+    <menuitem id="menu_avicola_granja" name="Granjas"
+              parent="menu_avicola_config" action="action_avicola_granja" sequence="10"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+    <menuitem id="menu_avicola_galpon" name="Galpones"
+              parent="menu_avicola_config" action="action_avicola_galpon" sequence="20"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+
+    <menuitem id="menu_avicola_operaciones" name="Operaciones"
+              parent="menu_avicola_root" sequence="30"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+    <menuitem id="menu_avicola_distribucion" name="Distribución de Pollitos"
+              parent="menu_avicola_operaciones" action="action_avicola_distribucion" sequence="10"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+    <menuitem id="menu_avicola_mortalidad" name="Mortalidad de Aves"
+              parent="menu_avicola_operaciones" action="action_avicola_mortalidad" sequence="15"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+    <menuitem id="menu_avicola_veterinario" name="Veterinarios"
+              parent="menu_avicola_config" action="action_avicola_veterinario" sequence="30"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+    <menuitem id="menu_avicola_plan_vacunacion" name="Planificaciones de Vacunación"
+              parent="menu_avicola_operaciones" action="action_avicola_plan_vacunacion" sequence="30"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+
+
     <!-- ======== GRANJA ======== -->
     <record id="view_avicola_granja_list" model="ir.ui.view">
         <field name="name">avicola.granja.list</field>
