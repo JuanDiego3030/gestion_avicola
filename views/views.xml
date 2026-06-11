@@ -12,6 +12,52 @@
         <field name="view_mode">form</field>
         <field name="target">current</field>
     </record>
+
+    <!-- Minimal stub actions so menus can reference actions before their full
+         view definitions appear later in this file. These will be updated when
+         the full action/view records are processed. -->
+    <record id="action_avicola_granja" model="ir.actions.act_window">
+        <field name="name">Granjas</field>
+        <field name="res_model">avicola.granja</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <record id="action_avicola_galpon" model="ir.actions.act_window">
+        <field name="name">Galpones</field>
+        <field name="res_model">avicola.galpon</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <record id="action_avicola_distribucion" model="ir.actions.act_window">
+        <field name="name">Distribuciones</field>
+        <field name="res_model">avicola.distribucion</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <record id="action_avicola_mortalidad" model="ir.actions.act_window">
+        <field name="name">Mortalidad</field>
+        <field name="res_model">avicola.mortalidad</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <record id="action_avicola_veterinario" model="ir.actions.act_window">
+        <field name="name">Veterinarios</field>
+        <field name="res_model">avicola.veterinario</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <record id="action_avicola_plan_vacunacion" model="ir.actions.act_window">
+        <field name="name">Planificaciones de Vacunación</field>
+        <field name="res_model">avicola.plan.vacunacion</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <record id="action_avicola_despacho" model="ir.actions.act_window">
+        <field name="name">Despachos</field>
+        <field name="res_model">avicola.despacho</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
     <menuitem id="menu_avicola_root" name="Gestión Avícola" sequence="10"
               groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
 
