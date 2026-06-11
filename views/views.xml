@@ -2,6 +2,16 @@
 <odoo>
 
     <!-- ======== MENU (defined early to satisfy parent references) ======== -->
+
+    <!-- Stub action created early so menus can reference the dashboard action before
+         the full dashboard view is declared later in this file. It will be updated
+         when the full action/view records are processed. -->
+    <record id="action_avicola_dashboard_window" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">avicola.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
     <menuitem id="menu_avicola_root" name="Gestión Avícola" sequence="10"
               groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
 
