@@ -383,7 +383,7 @@
     </record>
 
     <menuitem id="menu_avicola_despacho" name="Despachos"
-              parent="menu_avicola_operaciones" action="action_avicola_despacho" sequence="25"
+              parent="menu_avicola_root" action="action_avicola_despacho" sequence="25"
               groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
 
     <!-- ======== DASHBOARD MEJORADO ======== -->
