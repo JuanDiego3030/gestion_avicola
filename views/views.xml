@@ -704,7 +704,9 @@
     }
 
     function renderCharts() {
-        if (window.avicolaDashboardInlineLoaded || document.getElementById('avicola-granja-select')) { return; }
+        // Prevent double-rendering using an internal flag instead of relying
+        // on `avicolaDashboardInlineLoaded` which is set elsewhere.
+        if (window._avicolaDashboardRendered) { return; }
         var ctxA = document.getElementById('chart_galpones');
         if (!ctxA) { setTimeout(renderCharts, 500); return; }
 
@@ -723,6 +725,8 @@
                     if (ctxB) { new Chart(ctxB.getContext('2d'), { type: 'line', data: { labels: labels, datasets: [{ label: 'Densidad (aves/m²)', data: densities, borderColor: '#e9b3f0', backgroundColor: 'rgba(233,179,240,0.15)', tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false } }); }
                     var ctxC = document.getElementById('chart_pie');
                     if (ctxC) { var palette = ['#5c2261', '#722f77', '#e9b3f0', '#dcb3e3', '#bca0bf']; new Chart(ctxC.getContext('2d'), { type: 'pie', data: { labels: labels, datasets: [{ data: counts, backgroundColor: labels.map(function (_, i) { return palette[i % palette.length]; }) }] }, options: { responsive: true, maintainAspectRatio: false } }); }
+                    // Mark as rendered so subsequent DOM updates don't re-create charts
+                    window._avicolaDashboardRendered = true;
                 } catch (e) { console.error('Error rendering charts', e); }
             });
         }).catch(function (err) { console.error('RPC error fetching galpones', err); });
