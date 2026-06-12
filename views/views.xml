@@ -654,16 +654,26 @@
                         function loadChartJs(callback) {
                             console.log('Dashboard loadChartJs start');
                             if (window.Chart) { console.log('Chart.js already loaded'); callback(); return; }
-                            var script = document.createElement('script');
-                            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-                            script.onload = function () {
-                                console.log('Chart.js loaded');
+                            function appendScript(src, onload, onerror) {
+                                var s = document.createElement('script');
+                                s.src = src;
+                                s.onload = onload;
+                                s.onerror = onerror;
+                                document.head.appendChild(s);
+                            }
+                            // Try CDN first, then fallback to local asset inside the addon
+                            appendScript('https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js', function () {
+                                console.log('Chart.js loaded from CDN');
                                 callback();
-                            };
-                            script.onerror = function () {
-                                console.error('No se pudo cargar Chart.js desde CDN.');
-                            };
-                            document.head.appendChild(script);
+                            }, function () {
+                                console.warn('CDN failed, trying local asset');
+                                appendScript('/gestion_avicola/static/src/lib/chart.min.js', function () {
+                                    console.log('Chart.js loaded from local asset');
+                                    callback();
+                                }, function () {
+                                    console.error('No se pudo cargar Chart.js ni desde CDN ni desde el asset local.');
+                                });
+                            });
                         }
 
                         function rpcCall(model, method, args, kwargs) {
