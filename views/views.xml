@@ -654,24 +654,39 @@
                         function loadChartJs(callback) {
                             console.log('Dashboard loadChartJs start');
                             if (window.Chart) { console.log('Chart.js already loaded'); callback(); return; }
-                            function appendScript(src, onload, onerror) {
-                                var s = document.createElement('script');
-                                s.src = src;
-                                s.onload = onload;
-                                s.onerror = onerror;
-                                document.head.appendChild(s);
+                            function trySourceFetch(src, onSuccess, onFail) {
+                                fetch(src, { credentials: 'same-origin' }).then(function (resp) {
+                                    if (!resp.ok) { throw new Error('HTTP ' + resp.status); }
+                                    return resp.text();
+                                }).then(function (text) {
+                                    var t = (text || '').trim();
+                                    // If the response looks like HTML, treat as failure (likely a 404/html page)
+                                    if (t.indexOf('<') === 0) { throw new Error('Response appears to be HTML, not JS'); }
+                                    try {
+                                        (0, eval)(text);
+                                        console.log('Chart.js loaded via fetch from', src);
+                                        onSuccess();
+                                    } catch (e) {
+                                        console.error('Eval failed for', src, e);
+                                        onFail(e);
+                                    }
+                                }).catch(function (err) {
+                                    console.warn('Failed to fetch', src, err);
+                                    onFail(err);
+                                });
                             }
-                            // Try CDN first, then fallback to local asset inside the addon
-                            appendScript('https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js', function () {
-                                console.log('Chart.js loaded from CDN');
+
+                            // Try CDN first, then fallback to Odoo content URL for the addon static file
+                            trySourceFetch('https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js', function () {
                                 callback();
                             }, function () {
-                                console.warn('CDN failed, trying local asset');
-                                appendScript('/gestion_avicola/static/src/lib/chart.min.js', function () {
-                                    console.log('Chart.js loaded from local asset');
+                                console.warn('CDN failed, trying addon static via /web/content');
+                                // Attempt to load the addon static file via Odoo content controller
+                                trySourceFetch('/web/content/gestion_avicola/static/src/lib/chart.min.js', function () {
                                     callback();
                                 }, function () {
-                                    console.error('No se pudo cargar Chart.js ni desde CDN ni desde el asset local.');
+                                    console.error('No se pudo cargar Chart.js desde CDN ni desde el asset del addon.');
+                                    showChartError('No se pudo cargar la librería de gráficas (Chart.js). Revisa la consola del navegador.');
                                 });
                             });
                         }
