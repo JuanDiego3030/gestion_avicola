@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'views/views.xml',
     ],
+    'post_init_hook': 'post_init',
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
