@@ -5,13 +5,8 @@
     'author': 'Juan Arana',
     'category': 'Agriculture',
     'depends': ['base', 'web'],
-    'assets': {
-        'web.assets_backend': [
-            'gestion_avicola/static/src/lib/chart.min.js',
-            'gestion_avicola/static/src/css/dashboard.css',
-            'gestion_avicola/static/src/js/dashboard.js',
-        ],
-    },
+    # Assets moved inline to XML to avoid bundling issues during development
+    'assets': {},
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
