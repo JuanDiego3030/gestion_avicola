@@ -713,15 +713,88 @@ class AvicolaDashboard(models.Model):
                 """
 
             rec.dashboard_html = f"""
-            <div style="background: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px; border-radius: 20px; color: #0f172a;">
+            <style>
+                .avicola-dash-wrapper {{
+                    background: #f8fafc;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                    padding: 20px;
+                    border-radius: 20px;
+                    color: #0f172a;
+                    box-sizing: border-box;
+                }}
+                .avicola-kpi-grid {{
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 16px;
+                    margin-bottom: 24px;
+                }}
+                .avicola-grid-12 {{
+                    display: grid;
+                    grid-template-columns: repeat(12, 1fr);
+                    gap: 16px;
+                    margin-bottom: 24px;
+                }}
+                .avicola-col-span-3 {{ grid-column: span 3; }}
+                .avicola-col-span-4 {{ grid-column: span 4; }}
+                .avicola-col-span-5 {{ grid-column: span 5; }}
+                .avicola-col-span-6 {{ grid-column: span 6; }}
+
+                @media (max-width: 991px) {{
+                    .avicola-dash-wrapper {{
+                        padding: 12px 6px !important;
+                    }}
+                    .avicola-header-block {{
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 12px !important;
+                    }}
+                    .avicola-btn-group {{
+                        display: flex !important;
+                        flex-direction: column !important;
+                        width: 100% !important;
+                        gap: 8px !important;
+                    }}
+                    .avicola-btn-group a {{
+                        width: 100% !important;
+                        justify-content: center !important;
+                        text-align: center !important;
+                        box-sizing: border-box !important;
+                    }}
+                    .avicola-kpi-grid {{
+                        grid-template-columns: 1fr !important;
+                        gap: 12px !important;
+                        margin-bottom: 16px !important;
+                    }}
+                    .avicola-grid-12 {{
+                        display: flex !important;
+                        flex-direction: column !important;
+                        gap: 14px !important;
+                        margin-bottom: 16px !important;
+                    }}
+                    .avicola-col-span-3,
+                    .avicola-col-span-4,
+                    .avicola-col-span-5,
+                    .avicola-col-span-6 {{
+                        grid-column: auto !important;
+                        width: 100% !important;
+                        box-sizing: border-box !important;
+                    }}
+                    .avicola-bars-container {{
+                        overflow-x: auto !important;
+                        padding-bottom: 8px !important;
+                        -webkit-overflow-scrolling: touch !important;
+                    }}
+                }}
+            </style>
+            <div class="avicola-dash-wrapper">
                 
                 <!-- TOP HEADER -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                <div class="avicola-header-block" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
                     <div>
                         <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; letter-spacing: -0.5px;">Dashboard</h1>
                         <p style="font-size: 13px; color: #64748b; margin: 0;">Planifica, supervisa y optimiza tus operaciones avícolas con facilidad.</p>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <div class="avicola-btn-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                         <a href="/web#action=gestion_avicola.action_avicola_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
                             <i class="fa fa-plus"></i> Nuevo Despacho
                         </a>
@@ -738,7 +811,7 @@ class AvicolaDashboard(models.Model):
                 </div>
 
                 <!-- TOP 4 KPI CARDS -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div class="avicola-kpi-grid">
                     
                     <!-- Card 1: Total Aves (Dark Forest Green) -->
                     <div style="background-color: #144D34; border-radius: 18px; padding: 22px; color: #ffffff; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 6px 16px rgba(20,77,52,0.18);">
@@ -799,10 +872,10 @@ class AvicolaDashboard(models.Model):
                 </div>
 
                 <!-- MIDDLE SECTION -->
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div class="avicola-grid-12">
                     
                     <!-- Middle Left: Project Analytics (Ocupación Galpones) -->
-                    <div style="grid-column: span 5; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div class="avicola-col-span-5" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                             <div>
                                 <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Ocupación por Galpón</h3>
@@ -810,13 +883,13 @@ class AvicolaDashboard(models.Model):
                             </div>
                             <a href="/web#action=gestion_avicola.action_avicola_galpon" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Detalle →</a>
                         </div>
-                        <div style="display: flex; justify-content: space-around; align-items: flex-end; height: 160px; padding-top: 10px;">
+                        <div class="avicola-bars-container" style="display: flex; justify-content: space-around; align-items: flex-end; height: 160px; padding-top: 10px; min-width: 240px; overflow-x: auto;">
                             {bars_html}
                         </div>
                     </div>
 
                     <!-- Middle Center: Reminders / Próxima Actividad -->
-                    <div style="grid-column: span 3; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div class="avicola-col-span-3" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
                         <div>
                             <span style="font-size: 11px; font-weight: 700; color: #144D34; text-transform: uppercase; letter-spacing: 0.5px;">Recordatorio Operativo</span>
                             <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 8px 0 4px 0;">{p_title}</h3>
@@ -833,7 +906,7 @@ class AvicolaDashboard(models.Model):
                     </div>
 
                     <!-- Middle Right: Recent Despachos / Projects -->
-                    <div style="grid-column: span 4; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <div class="avicola-col-span-4" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Despachos Recientes</h3>
                             <a href="/web#action=gestion_avicola.action_avicola_despacho" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Todos →</a>
@@ -846,10 +919,10 @@ class AvicolaDashboard(models.Model):
                 </div>
 
                 <!-- BOTTOM SECTION -->
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px;">
+                <div class="avicola-grid-12" style="margin-bottom: 0;">
                     
                     <!-- Bottom Left: Team Collaboration (Veterinarios) -->
-                    <div style="grid-column: span 5; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <div class="avicola-col-span-5" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Equipo Veterinario y Campo</h3>
                             <a href="/web#action=gestion_avicola.action_avicola_veterinario" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Equipo →</a>
@@ -860,7 +933,7 @@ class AvicolaDashboard(models.Model):
                     </div>
 
                     <!-- Bottom Center: Project Progress (Gauge Semi-circle) -->
-                    <div style="grid-column: span 4; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div class="avicola-col-span-4" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Capacidad & Ocupación</h3>
                             <span style="font-size: 11px; color: #64748b;">Global</span>
@@ -882,7 +955,7 @@ class AvicolaDashboard(models.Model):
                     </div>
 
                     <!-- Bottom Right: Time Tracker / Control Sanitario Dark Card -->
-                    <div style="grid-column: span 3; background: radial-gradient(circle at 50% 120%, #1e5a3c 0%, #0c281a 60%, #06160e 100%); border-radius: 18px; padding: 22px; color: white; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 6px 18px rgba(12,40,26,0.3); min-height: 200px;">
+                    <div class="avicola-col-span-3" style="background: radial-gradient(circle at 50% 120%, #1e5a3c 0%, #0c281a 60%, #06160e 100%); border-radius: 18px; padding: 22px; color: white; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 6px 18px rgba(12,40,26,0.3); min-height: 200px;">
                         <div>
                             <span style="font-size: 11px; font-weight: 700; color: #a7f3d0; text-transform: uppercase; letter-spacing: 0.5px;">Control Sanitario</span>
                             <div style="font-size: 36px; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; margin: 16px 0 6px 0;">{mortalidad_pct:.2f}%</div>

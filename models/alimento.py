@@ -370,15 +370,90 @@ class AvicolaAlimentoDashboard(models.Model):
                 """
 
             rec.dashboard_html = f"""
-            <div style="background: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; border-radius: 20px; color: #0f172a;">
+            <style>
+                .avicola-dash-wrapper {{
+                    background: #f8fafc;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    padding: 20px;
+                    border-radius: 20px;
+                    color: #0f172a;
+                    box-sizing: border-box;
+                }}
+                .avicola-kpi-grid {{
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 16px;
+                    margin-bottom: 24px;
+                }}
+                .avicola-grid-12 {{
+                    display: grid;
+                    grid-template-columns: repeat(12, 1fr);
+                    gap: 16px;
+                    margin-bottom: 24px;
+                }}
+                .avicola-col-span-6 {{ grid-column: span 6; }}
+
+                @media (max-width: 991px) {{
+                    .avicola-dash-wrapper {{
+                        padding: 12px 6px !important;
+                    }}
+                    .avicola-header-block {{
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 12px !important;
+                    }}
+                    .avicola-btn-group {{
+                        display: flex !important;
+                        flex-direction: column !important;
+                        width: 100% !important;
+                        gap: 8px !important;
+                    }}
+                    .avicola-btn-group a {{
+                        width: 100% !important;
+                        justify-content: center !important;
+                        text-align: center !important;
+                        box-sizing: border-box !important;
+                    }}
+                    .avicola-kpi-grid {{
+                        grid-template-columns: 1fr !important;
+                        gap: 12px !important;
+                        margin-bottom: 16px !important;
+                    }}
+                    .avicola-grid-12 {{
+                        display: flex !important;
+                        flex-direction: column !important;
+                        gap: 14px !important;
+                        margin-bottom: 16px !important;
+                    }}
+                    .avicola-col-span-6 {{
+                        grid-column: auto !important;
+                        width: 100% !important;
+                        box-sizing: border-box !important;
+                    }}
+                    .avicola-bottom-card {{
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                    }}
+                    .avicola-bottom-actions {{
+                        flex-direction: column !important;
+                        width: 100% !important;
+                    }}
+                    .avicola-bottom-actions a {{
+                        width: 100% !important;
+                        justify-content: center !important;
+                        text-align: center !important;
+                    }}
+                }}
+            </style>
+            <div class="avicola-dash-wrapper">
                 
                 <!-- TOP HEADER -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                <div class="avicola-header-block" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
                     <div>
                         <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; letter-spacing: -0.5px;">Gestión y Control de Alimento</h1>
                         <p style="font-size: 13px; color: #64748b; margin: 0;">Supervisión de despachos a silos, stock disponible y consumo diario de aves.</p>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <div class="avicola-btn-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                         <a href="/web#action=gestion_avicola.action_avicola_alimento_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
                             <i class="fa fa-plus"></i> Despachar Alimento
                         </a>
@@ -392,7 +467,7 @@ class AvicolaAlimentoDashboard(models.Model):
                 </div>
 
                 <!-- 4 TOP KPI CARDS -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div class="avicola-kpi-grid">
                     
                     <!-- Card 1: Stock Total Alimento (Dark Forest Green) -->
                     <div style="background-color: #144D34; border-radius: 18px; padding: 22px; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 6px 16px rgba(20,77,52,0.18);">
@@ -453,10 +528,10 @@ class AvicolaAlimentoDashboard(models.Model):
                 </div>
 
                 <!-- MIDDLE SECTION -->
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div class="avicola-grid-12">
                     
                     <!-- Middle Left: Consumo por Tipo de Alimento (Fases) -->
-                    <div style="grid-column: span 6; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <div class="avicola-col-span-6" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
                             <div>
                                 <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Consumo por Fase / Tipo de Alimento</h3>
@@ -470,7 +545,7 @@ class AvicolaAlimentoDashboard(models.Model):
                     </div>
 
                     <!-- Middle Right: Despachos Recientes a Silos -->
-                    <div style="grid-column: span 6; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <div class="avicola-col-span-6" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <div>
                                 <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Últimos Despachos a Silos</h3>
@@ -486,7 +561,7 @@ class AvicolaAlimentoDashboard(models.Model):
                 </div>
 
                 <!-- BOTTOM ACCESS CARDS -->
-                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 18px 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                <div class="avicola-bottom-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 18px 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 40px; height: 40px; border-radius: 10px; background: #144D3415; color: #144D34; display: flex; align-items: center; justify-content: center; font-size: 18px;">
                             <i class="fa fa-bar-chart"></i>
@@ -496,7 +571,7 @@ class AvicolaAlimentoDashboard(models.Model):
                             <div style="font-size: 12px; color: #64748b;">Explora gráficas interactivas de evolución de consumo, pivotes por lote y stock de silos.</div>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <div class="avicola-bottom-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <a href="/web#action=gestion_avicola.action_avicola_alimento_graficas" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px; text-decoration: none;">
                             <i class="fa fa-line-chart me-1"></i> Gráfica de Consumos
                         </a>
