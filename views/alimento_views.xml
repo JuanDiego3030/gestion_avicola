@@ -6,7 +6,7 @@
         <field name="name">avicola.alimento.tipo.list</field>
         <field name="model">avicola.alimento.tipo</field>
         <field name="arch" type="xml">
-            <tree string="Tipos de Alimento Balanceado">
+            <list string="Tipos de Alimento Balanceado">
                 <field name="codigo"/>
                 <field name="name"/>
                 <field name="fase" widget="badge"/>
@@ -14,7 +14,7 @@
                 <field name="energia_kcal"/>
                 <field name="costo_por_kg"/>
                 <field name="active" widget="boolean_toggle"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -53,7 +53,7 @@
     <record id="action_avicola_alimento_tipo" model="ir.actions.act_window">
         <field name="name">Tipos y Fórmulas de Alimento</field>
         <field name="res_model">avicola.alimento.tipo</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
 
@@ -62,7 +62,7 @@
         <field name="name">avicola.alimento.despacho.list</field>
         <field name="model">avicola.alimento.despacho</field>
         <field name="arch" type="xml">
-            <tree string="Despachos de Alimento" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
+            <list string="Despachos de Alimento" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="granja_id"/>
@@ -73,7 +73,7 @@
                 <field name="presentacion"/>
                 <field name="chofer"/>
                 <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'" decoration-danger="estado == 'cancelado'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -156,7 +156,7 @@
     <record id="action_avicola_alimento_despacho" model="ir.actions.act_window">
         <field name="name">Despacho de Alimento a Granjas</field>
         <field name="res_model">avicola.alimento.despacho</field>
-        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="view_mode">list,form,graph,pivot</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Registra un nuevo despacho de alimento hacia los silos de las granjas.</p>
         </field>
@@ -168,7 +168,7 @@
         <field name="name">avicola.alimento.consumo.list</field>
         <field name="model">avicola.alimento.consumo</field>
         <field name="arch" type="xml">
-            <tree string="Consumo Diario de Alimento" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+            <list string="Consumo Diario de Alimento" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="granja_id"/>
@@ -178,7 +178,7 @@
                 <field name="cantidad_aves"/>
                 <field name="consumo_ave_dia_gr" avg="Promedio g/ave/día"/>
                 <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -284,7 +284,7 @@
     <record id="action_avicola_alimento_consumo" model="ir.actions.act_window">
         <field name="name">Consumo Diario de Alimento</field>
         <field name="res_model">avicola.alimento.consumo</field>
-        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="view_mode">list,form,graph,pivot</field>
         <field name="search_view_id" ref="view_avicola_alimento_consumo_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Registra el consumo diario de alimento en los galpones.</p>
@@ -295,7 +295,7 @@
     <record id="action_avicola_alimento_graficas" model="ir.actions.act_window">
         <field name="name">Analítica Dinámica de Consumo</field>
         <field name="res_model">avicola.alimento.consumo</field>
-        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_mode">graph,pivot,list</field>
         <field name="search_view_id" ref="view_avicola_alimento_consumo_search"/>
     </record>
 
