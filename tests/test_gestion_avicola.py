@@ -2,6 +2,7 @@
 from odoo.tests.common import TransactionCase
 from odoo.exceptions import UserError
 from odoo import fields
+from datetime import timedelta
 
 
 class TestGestionAvicola(TransactionCase):
@@ -201,3 +202,50 @@ class TestGestionAvicola(TransactionCase):
         })
         with self.assertRaises(UserError):
             consumo_exceso.action_confirmar()
+
+    def test_07_proyecciones_saca(self):
+        """Prueba de configuración y cálculo de proyecciones de lotes a sacar"""
+        # 1. Obtener o crear configuración
+        config = self.env['avicola.proyeccion.config'].get_default_config()
+        self.assertTrue(config)
+        self.assertEqual(config.edad_objetivo_dias, 42)
+        self.assertEqual(config.peso_objetivo_kg, 2.50)
+
+        # 2. Distribuir un lote nuevo y confirmar
+        dist = self.env['avicola.distribucion'].create({
+            'lote_incubadora': 'INC-PROY-001',
+            'fecha': fields.Date.today(),
+            'granja_id': self.granja.id,
+            'galpon_id': self.galpon_2.id,
+            'cantidad': 10000,
+        })
+        dist.action_confirmar()
+
+        # Debe haberse creado automáticamente la proyección
+        proy = self.env['avicola.proyeccion.lote'].search([('distribucion_id', '=', dist.id)], limit=1)
+        self.assertTrue(proy, "La confirmación de distribución debe crear una proyección de saca.")
+        self.assertEqual(proy.edad_objetivo_dias, 42)
+        self.assertEqual(proy.peso_objetivo_kg, 2.50)
+        self.assertEqual(proy.fecha_proyectada_saca, fields.Date.today() + timedelta(days=42))
+        self.assertGreater(proy.kilos_totales_proyectados, 0.0)
+        self.assertGreater(proy.jaulas_requeridas, 0)
+        self.assertGreater(proy.viajes_camion_estimados, 0)
+
+        # 3. Probar ajuste de parámetros ("poder moverle")
+        # Cambiar a saca anticipada a los 38 días con peso objetivo 2.30 kg
+        config.write({
+            'edad_objetivo_dias': 38,
+            'peso_objetivo_kg': 2.30,
+        })
+        config.action_aplicar_a_lotes_activos()
+
+        proy.invalidate_recordset()
+        self.assertEqual(proy.edad_objetivo_dias, 38)
+        self.assertEqual(proy.peso_objetivo_kg, 2.30)
+        self.assertEqual(proy.fecha_proyectada_saca, fields.Date.today() + timedelta(days=38))
+
+        # 4. Probar acción de generar despacho pre-cargado
+        action_despacho = proy.action_crear_despacho()
+        self.assertEqual(action_despacho['res_model'], 'avicola.despacho')
+        self.assertEqual(action_despacho['context']['default_galpon_id'], self.galpon_2.id)
+        self.assertGreater(action_despacho['context']['default_cantidad_aves'], 0)

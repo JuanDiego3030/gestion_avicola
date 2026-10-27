@@ -185,6 +185,13 @@
                     <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_proyeccion" type="object"
+                                class="oe_stat_button" icon="fa-line-chart"
+                                invisible="estado != 'confirmado'">
+                            <field name="proyeccion_count" widget="statinfo" string="Proyección Saca"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="lote_incubadora"/>
@@ -510,10 +517,10 @@
                     <div class="d-flex align-items-center gap-2 flex-wrap">
                         <button name="action_new_despacho" string="+ Nuevo Despacho" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
                         <button name="action_new_distribucion" string="+ Distribuir Pollitos" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
+                        <button name="action_open_proyecciones" string="📊 Proyecciones Saca" type="object" class="btn btn-sm btn-outline-info" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
                         <button name="action_open_galpones" string="🐔 Galpones" type="object" class="btn btn-sm btn-outline-dark" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
                         <button name="action_open_salidas" string="🚚 Despachos" type="object" class="btn btn-sm btn-outline-success" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
                         <button name="action_open_mortalidad" string="📉 Mortalidad" type="object" class="btn btn-sm btn-outline-danger" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
-                        <button name="action_open_veterinarios" string="👨‍⚕️ Veterinarios" type="object" class="btn btn-sm btn-outline-primary" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
                     </div>
                 </header>
                 <sheet style="max-width: 100% !important; width: 100% !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important;">

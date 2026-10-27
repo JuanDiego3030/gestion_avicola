@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======== CONFIGURACIÓN DE PARÁMETROS DE PROYECCIÓN ======== -->
+    <record id="view_avicola_proyeccion_config_list" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.config.list</field>
+        <field name="model">avicola.proyeccion.config</field>
+        <field name="arch" type="xml">
+            <list string="Perfiles de Configuración de Proyección">
+                <field name="name"/>
+                <field name="edad_objetivo_dias"/>
+                <field name="peso_objetivo_kg"/>
+                <field name="ganancia_diaria_gr"/>
+                <field name="mortalidad_estimada_pct"/>
+                <field name="ica_estimado"/>
+                <field name="pollos_por_jaula"/>
+                <field name="jaulas_por_camion"/>
+                <field name="precio_estimado_kg"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_proyeccion_config_form" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.config.form</field>
+        <field name="model">avicola.proyeccion.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuración de Parámetros de Saca">
+                <header>
+                    <button name="action_aplicar_a_lotes_activos" string="⚡ Aplicar a Todos los Lotes Activos"
+                            type="object" class="btn-primary"
+                            confirm="¿Deseas aplicar estos parámetros a todas las proyecciones de lotes en crianza activas?"/>
+                    <button name="action_abrir_proyecciones" string="📅 Ver Lotes a Sacar"
+                            type="object" class="btn-outline-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre del Perfil de Parámetros"/>
+                        <h1><field name="name" placeholder="Ej. Estándar Cobb 500 / Ross 308"/></h1>
+                    </div>
+                    <group>
+                        <group string="Crecimiento y Edad de Sacrificio">
+                            <field name="edad_objetivo_dias"/>
+                            <field name="peso_objetivo_kg"/>
+                            <field name="ganancia_diaria_gr"/>
+                            <field name="mortalidad_estimada_pct"/>
+                            <field name="ica_estimado"/>
+                        </group>
+                        <group string="Logística, Transporte y Comercial">
+                            <field name="pollos_por_jaula"/>
+                            <field name="jaulas_por_camion"/>
+                            <field name="dias_aviso_previo"/>
+                            <field name="precio_estimado_kg"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notas y Manual Técnico de Manejo">
+                            <field name="notas" placeholder="Anotaciones sobre densidad, estirpe, ventilación o peso mínimo exigido por matadero..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_proyeccion_config" model="ir.actions.act_window">
+        <field name="name">Configuración de Proyecciones</field>
+        <field name="res_model">avicola.proyeccion.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define los parámetros zootécnicos y logísticos para proyectar la saca de los lotes.</p>
+        </field>
+    </record>
+
+
+    <!-- ======== PROYECCIÓN DE LOTES A SACAR ======== -->
+    <record id="view_avicola_proyeccion_lote_list" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.lote.list</field>
+        <field name="model">avicola.proyeccion.lote</field>
+        <field name="arch" type="xml">
+            <list string="Proyecciones de Lotes a Sacar"
+                  decoration-danger="estado == 'listo'"
+                  decoration-warning="estado == 'proximo'"
+                  decoration-info="estado == 'crecimiento'"
+                  decoration-primary="estado == 'en_proceso'"
+                  decoration-muted="estado == 'sacado'">
+                <field name="name"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="lote_incubadora"/>
+                <field name="fecha_ingreso"/>
+                <field name="edad_actual_dias"/>
+                <field name="fecha_proyectada_saca"/>
+                <field name="dias_para_saca" decoration-bf="dias_para_saca &lt;= 7"/>
+                <field name="cantidad_actual"/>
+                <field name="aves_proyectadas_saca" sum="Total Aves Estimadas"/>
+                <field name="peso_objetivo_kg"/>
+                <field name="kilos_totales_proyectados" sum="Total Kilos Estimados"/>
+                <field name="viajes_camion_estimados" sum="Total Camiones Estimados"/>
+                <field name="estado" widget="badge"
+                       decoration-danger="estado == 'listo'"
+                       decoration-warning="estado == 'proximo'"
+                       decoration-info="estado == 'crecimiento'"
+                       decoration-primary="estado == 'en_proceso'"
+                       decoration-success="estado == 'sacado'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_proyeccion_lote_form" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.lote.form</field>
+        <field name="model">avicola.proyeccion.lote</field>
+        <field name="arch" type="xml">
+            <form string="Proyección de Saca de Lote">
+                <header>
+                    <button name="action_crear_despacho" string="+ Generar Despacho a Matadero"
+                            type="object" class="btn-primary"
+                            invisible="estado == 'sacado'"/>
+                    <button name="action_recalcular" string="Recalcular Proyección"
+                            type="object" class="btn-outline-secondary"/>
+                    <button name="action_marcar_sacado" string="Marcar como Sacado"
+                            type="object" class="btn-outline-dark"
+                            invisible="estado in ('crecimiento', 'sacado')"/>
+                    <field name="estado" widget="statusbar"
+                           statusbar_visible="crecimiento,proximo,listo,en_proceso,sacado"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Referencia Proyección"/>
+                        <h1><field name="name"/></h1>
+                        <h4>
+                            <field name="lote_incubadora" readonly="1"/> • <field name="galpon_id" readonly="1"/> (<field name="granja_id" readonly="1"/>)
+                        </h4>
+                    </div>
+
+                    <!-- Indicadores rápidos superiores -->
+                    <div class="row g-3 my-2">
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border">
+                                <span class="text-muted small fw-bold">EDAD ACTUAL</span>
+                                <div class="fs-3 fw-bold text-dark"><field name="edad_actual_dias"/> <span class="small fs-6">días</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border">
+                                <span class="text-muted small fw-bold">DÍAS PARA SACA</span>
+                                <div class="fs-3 fw-bold" style="color: #144D34;"><field name="dias_para_saca"/> <span class="small fs-6">días</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border">
+                                <span class="text-muted small fw-bold">AVES A SACAR</span>
+                                <div class="fs-3 fw-bold text-primary"><field name="aves_proyectadas_saca"/></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border">
+                                <span class="text-muted small fw-bold">KILOS TOTALES</span>
+                                <div class="fs-3 fw-bold text-success"><field name="kilos_totales_proyectados"/> <span class="small fs-6">kg</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <group>
+                        <group string="Ubicación y Ciclo de Crianza">
+                            <field name="granja_id"/>
+                            <field name="galpon_id"/>
+                            <field name="distribucion_id" readonly="1"/>
+                            <field name="fecha_ingreso"/>
+                            <field name="fecha_proyectada_saca"/>
+                        </group>
+                        <group string="Población y Mortalidad Real">
+                            <field name="cantidad_inicial"/>
+                            <field name="mortalidad_acumulada"/>
+                            <field name="cantidad_actual"/>
+                            <field name="mortalidad_real_pct"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Parámetros de Saca (Ajustables)">
+                            <group>
+                                <group string="Parámetros Específicos para este Lote">
+                                    <field name="config_id"/>
+                                    <field name="edad_objetivo_dias"/>
+                                    <field name="peso_objetivo_kg"/>
+                                    <field name="ganancia_diaria_gr"/>
+                                    <field name="mortalidad_estimada_pct"/>
+                                </group>
+                                <group string="Peso Estimado a la Fecha">
+                                    <field name="peso_estimado_actual_kg"/>
+                                    <div class="alert alert-info py-2" role="alert">
+                                        <i class="fa fa-info-circle me-1"></i> Puedes modificar estos valores para simular escenarios de saca temprana (ej. 38 días) o peso pesado (ej. 45 días).
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Logística de Cosecha y Transporte">
+                            <group>
+                                <group string="Cálculo de Jaulas y Camiones">
+                                    <field name="pollos_por_jaula"/>
+                                    <field name="jaulas_requeridas"/>
+                                    <field name="jaulas_por_camion"/>
+                                    <field name="viajes_camion_estimados"/>
+                                </group>
+                                <group string="Destino y Matadero">
+                                    <field name="cliente_sugerido" placeholder="Ej. Matadero Central C.A."/>
+                                    <field name="consumo_estimado_alimento_kg"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Valorización Económica y Despachos Reales">
+                            <group>
+                                <group string="Ingresos Proyectados">
+                                    <field name="precio_estimado_kg"/>
+                                    <field name="valor_estimado_venta"/>
+                                </group>
+                                <group string="Ejecución Real (Despachado a la Fecha)">
+                                    <field name="cantidad_aves_despachadas"/>
+                                    <field name="kilos_despachados_reales"/>
+                                </group>
+                            </group>
+                            <field name="observaciones" placeholder="Instrucciones especiales para la cuadrilla de agarre o matadero..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Gráfica de Kilos y Aves por Fecha de Saca -->
+    <record id="view_avicola_proyeccion_lote_graph" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.lote.graph</field>
+        <field name="model">avicola.proyeccion.lote</field>
+        <field name="arch" type="xml">
+            <graph string="Proyección de Kilos a Sacar por Fecha" type="bar" stacked="1">
+                <field name="fecha_proyectada_saca" interval="month"/>
+                <field name="granja_id"/>
+                <field name="kilos_totales_proyectados" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Tabla Pivot de Proyecciones -->
+    <record id="view_avicola_proyeccion_lote_pivot" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.lote.pivot</field>
+        <field name="model">avicola.proyeccion.lote</field>
+        <field name="arch" type="xml">
+            <pivot string="Matriz de Proyección de Sacas">
+                <field name="granja_id" type="row"/>
+                <field name="galpon_id" type="row"/>
+                <field name="fecha_proyectada_saca" interval="month" type="col"/>
+                <field name="aves_proyectadas_saca" type="measure"/>
+                <field name="kilos_totales_proyectados" type="measure"/>
+                <field name="viajes_camion_estimados" type="measure"/>
+                <field name="valor_estimado_venta" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Calendario Visual de Fechas de Saca -->
+    <record id="view_avicola_proyeccion_lote_calendar" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.lote.calendar</field>
+        <field name="model">avicola.proyeccion.lote</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendario de Sacas a Matadero"
+                      date_start="fecha_proyectada_saca"
+                      color="granja_id"
+                      mode="month"
+                      quick_create="0">
+                <field name="name"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="aves_proyectadas_saca"/>
+                <field name="kilos_totales_proyectados"/>
+                <field name="estado"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Búsqueda y Filtros de Proyecciones -->
+    <record id="view_avicola_proyeccion_lote_search" model="ir.ui.view">
+        <field name="name">avicola.proyeccion.lote.search</field>
+        <field name="model">avicola.proyeccion.lote</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Proyecciones de Saca">
+                <field name="name"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="lote_incubadora"/>
+                <filter string="Listos para Saca" name="filter_listos" domain="[('estado', '=', 'listo')]"/>
+                <filter string="Próximos (≤ 7 días)" name="filter_proximos" domain="[('estado', '=', 'proximo')]"/>
+                <filter string="En Crecimiento" name="filter_crecimiento" domain="[('estado', '=', 'crecimiento')]"/>
+                <filter string="En Proceso de Saca" name="filter_en_proceso" domain="[('estado', '=', 'en_proceso')]"/>
+                <separator/>
+                <filter string="Fecha Proyectada Saca" name="filter_fecha_saca" date="fecha_proyectada_saca"/>
+                <group>
+                    <filter string="Granja" name="groupby_granja" domain="[]" context="{'group_by': 'granja_id'}"/>
+                    <filter string="Galpón" name="groupby_galpon" domain="[]" context="{'group_by': 'galpon_id'}"/>
+                    <filter string="Estado" name="groupby_estado" domain="[]" context="{'group_by': 'estado'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acciones de Ventana -->
+    <record id="action_avicola_proyeccion_lote" model="ir.actions.act_window">
+        <field name="name">Lotes a Sacar</field>
+        <field name="res_model">avicola.proyeccion.lote</field>
+        <field name="view_mode">list,form,calendar,graph,pivot</field>
+        <field name="search_view_id" ref="view_avicola_proyeccion_lote_search"/>
+        <field name="context">{'search_default_filter_listos': 0, 'search_default_filter_proximos': 0}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Proyecta la fecha óptima de cosecha, kilos y camiones requeridos para tus lotes.</p>
+        </field>
+    </record>
+
+    <record id="action_avicola_proyeccion_lote_calendar" model="ir.actions.act_window">
+        <field name="name">Calendario de Sacas a Matadero</field>
+        <field name="res_model">avicola.proyeccion.lote</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="search_view_id" ref="view_avicola_proyeccion_lote_search"/>
+    </record>
+
+
+    <!-- ======== MENUS DEL MÓDULO DE PROYECCIONES ======== -->
+    <menuitem id="menu_avicola_proyecciones_root" name="Proyecciones de Saca"
+              parent="menu_avicola_root" sequence="12"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+
+    <menuitem id="menu_avicola_proyecciones_lotes" name="Lotes a Sacar"
+              parent="menu_avicola_proyecciones_root" action="action_avicola_proyeccion_lote" sequence="10"/>
+
+    <menuitem id="menu_avicola_proyecciones_calendar" name="Calendario de Sacas"
+              parent="menu_avicola_proyecciones_root" action="action_avicola_proyeccion_lote_calendar" sequence="20"/>
+
+    <menuitem id="menu_avicola_proyecciones_config" name="Configuración de Parámetros"
+              parent="menu_avicola_proyecciones_root" action="action_avicola_proyeccion_config" sequence="30"/>
+
+</odoo>

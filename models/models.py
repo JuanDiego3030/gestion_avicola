@@ -85,6 +85,12 @@ class AvicolaDistribucion(models.Model):
         [('borrador', 'Borrador'), ('confirmado', 'Confirmado')],
         string='Estado', default='borrador', required=True
     )
+    proyeccion_ids = fields.One2many('avicola.proyeccion.lote', 'distribucion_id', string='Proyecciones de Saca')
+    proyeccion_count = fields.Integer(string='Proyecciones', compute='_compute_proyeccion_count')
+
+    def _compute_proyeccion_count(self):
+        for rec in self:
+            rec.proyeccion_count = len(rec.proyeccion_ids)
 
     def action_confirmar(self):
         for rec in self:
@@ -97,6 +103,31 @@ class AvicolaDistribucion(models.Model):
             rec.galpon_id.cantidad_actual += rec.cantidad
             rec.estado = 'confirmado'
 
+            # Generar o actualizar automáticamente la proyección de saca
+            Proy = self.env['avicola.proyeccion.lote']
+            proy = Proy.search([('distribucion_id', '=', rec.id)], limit=1)
+            cfg = self.env['avicola.proyeccion.config'].get_default_config()
+            vals = {
+                'distribucion_id': rec.id,
+                'lote_incubadora': rec.lote_incubadora,
+                'granja_id': rec.granja_id.id,
+                'galpon_id': rec.galpon_id.id,
+                'fecha_ingreso': rec.fecha,
+                'cantidad_inicial': rec.cantidad,
+                'config_id': cfg.id if cfg else False,
+                'edad_objetivo_dias': cfg.edad_objetivo_dias if cfg else 42,
+                'peso_objetivo_kg': cfg.peso_objetivo_kg if cfg else 2.50,
+                'ganancia_diaria_gr': cfg.ganancia_diaria_gr if cfg else 59.5,
+                'mortalidad_estimada_pct': cfg.mortalidad_estimada_pct if cfg else 3.50,
+                'pollos_por_jaula': cfg.pollos_por_jaula if cfg else 15,
+                'jaulas_por_camion': cfg.jaulas_por_camion if cfg else 220,
+                'precio_estimado_kg': cfg.precio_estimado_kg if cfg else 1.85,
+            }
+            if proy:
+                proy.write(vals)
+            else:
+                Proy.create(vals)
+
     def action_borrador(self):
         for rec in self:
             if rec.estado == 'confirmado':
@@ -106,7 +137,23 @@ class AvicolaDistribucion(models.Model):
                         f'es menor que la cantidad distribuida ({rec.cantidad}).'
                     )
                 rec.galpon_id.cantidad_actual -= rec.cantidad
+                # Eliminar proyección generada si vuelve a borrador
+                self.env['avicola.proyeccion.lote'].search([('distribucion_id', '=', rec.id)]).unlink()
             rec.estado = 'borrador'
+
+    def action_open_proyeccion(self):
+        self.ensure_one()
+        proy = self.env['avicola.proyeccion.lote'].search([('distribucion_id', '=', self.id)], limit=1)
+        if not proy:
+            raise UserError('No se encontró una proyección activa para este lote.')
+        return {
+            'name': f'Proyección de Saca - {self.lote_incubadora}',
+            'type': 'ir.actions.act_window',
+            'res_model': 'avicola.proyeccion.lote',
+            'res_id': proy.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
 
 
 class AvicolaMortalidad(models.Model):
@@ -681,6 +728,9 @@ class AvicolaDashboard(models.Model):
                         <a href="/odoo/action-gestion_avicola.action_avicola_distribucion" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa fa-truck"></i> Distribuir Pollitos
                         </a>
+                        <a href="/odoo/action-gestion_avicola.action_avicola_proyeccion_lote" class="btn btn-sm" style="background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa fa-line-chart"></i> Proyecciones Saca
+                        </a>
                         <a href="/odoo/action-gestion_avicola.action_avicola_galpon" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa fa-th-large"></i> Ver Galpones
                         </a>
@@ -986,6 +1036,17 @@ class AvicolaDashboard(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'avicola.granja',
             'view_mode': 'list,form',
+            'target': 'current',
+        }
+
+    def action_open_proyecciones(self):
+        domain = [('granja_id', '=', self.selected_granja_id.id)] if self.selected_granja_id else []
+        return {
+            'name': 'Proyecciones de Saca',
+            'type': 'ir.actions.act_window',
+            'res_model': 'avicola.proyeccion.lote',
+            'view_mode': 'list,form,calendar,graph,pivot',
+            'domain': domain,
             'target': 'current',
         }
 

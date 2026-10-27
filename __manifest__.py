@@ -11,6 +11,7 @@
         'report/report_ticket_despacho.xml',
         'views/views.xml',
         'views/alimento_views.xml',
+        'views/proyeccion_views.xml',
     ],
     'post_init_hook': 'post_init',
     'installable': True,

@@ -12,3 +12,5 @@ access_avicola_alimento_tipo,avicola.alimento.tipo,model_avicola_alimento_tipo,g
 access_avicola_alimento_despacho,avicola.alimento.despacho,model_avicola_alimento_despacho,gestion_avicola.group_veterinario,1,1,1,1
 access_avicola_alimento_consumo,avicola.alimento.consumo,model_avicola_alimento_consumo,gestion_avicola.group_veterinario,1,1,1,1
 access_avicola_alimento_dashboard,avicola.alimento.dashboard,model_avicola_alimento_dashboard,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_proyeccion_config,avicola.proyeccion.config,model_avicola_proyeccion_config,gestion_avicola.group_veterinario,1,1,1,1
+access_avicola_proyeccion_lote,avicola.proyeccion.lote,model_avicola_proyeccion_lote,gestion_avicola.group_veterinario,1,1,1,1
