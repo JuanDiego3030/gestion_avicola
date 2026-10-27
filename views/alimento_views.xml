@@ -223,9 +223,9 @@
         <field name="name">avicola.alimento.consumo.graph</field>
         <field name="model">avicola.alimento.consumo</field>
         <field name="arch" type="xml">
-            <graph string="Evolución Dinámica de Consumo de Alimento" type="line" sample="1">
-                <field name="fecha" interval="day"/>
-                <field name="galpon_id"/>
+            <graph string="Analítica Dinámica de Consumo" type="bar" stacked="1">
+                <field name="tipo_alimento_id"/>
+                <field name="granja_id"/>
                 <field name="cantidad_kg" type="measure"/>
             </graph>
         </field>
@@ -248,7 +248,7 @@
         <field name="name">avicola.alimento.consumo.pivot</field>
         <field name="model">avicola.alimento.consumo</field>
         <field name="arch" type="xml">
-            <pivot string="Matriz de Consumo de Alimento" sample="1">
+            <pivot string="Matriz de Consumo de Alimento">
                 <field name="granja_id" type="row"/>
                 <field name="galpon_id" type="row"/>
                 <field name="tipo_alimento_id" type="col"/>
@@ -258,10 +258,34 @@
         </field>
     </record>
 
+    <!-- Vista Búsqueda / Filtros de Consumo -->
+    <record id="view_avicola_alimento_consumo_search" model="ir.ui.view">
+        <field name="name">avicola.alimento.consumo.search</field>
+        <field name="model">avicola.alimento.consumo</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Consumos de Alimento">
+                <field name="name"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="tipo_alimento_id"/>
+                <filter string="Confirmados" name="confirmados" domain="[('estado', '=', 'confirmado')]"/>
+                <filter string="Borradores" name="borradores" domain="[('estado', '=', 'borrador')]"/>
+                <separator/>
+                <filter string="Fecha de Consumo" name="filter_fecha" date="fecha"/>
+                <group>
+                    <filter string="Granja" name="group_by_granja" domain="[]" context="{'group_by': 'granja_id'}"/>
+                    <filter string="Galpón" name="group_by_galpon" domain="[]" context="{'group_by': 'galpon_id'}"/>
+                    <filter string="Tipo de Alimento" name="group_by_tipo" domain="[]" context="{'group_by': 'tipo_alimento_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_avicola_alimento_consumo" model="ir.actions.act_window">
         <field name="name">Consumo Diario de Alimento</field>
         <field name="res_model">avicola.alimento.consumo</field>
         <field name="view_mode">list,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_avicola_alimento_consumo_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Registra el consumo diario de alimento en los galpones.</p>
         </field>
@@ -272,6 +296,7 @@
         <field name="name">Analítica Dinámica de Consumo</field>
         <field name="res_model">avicola.alimento.consumo</field>
         <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_avicola_alimento_consumo_search"/>
     </record>
 
 
@@ -284,12 +309,14 @@
                 <header class="d-flex justify-content-between align-items-center px-4 py-2 bg-white border-bottom shadow-sm">
                     <div class="d-flex align-items-center gap-2">
                         <span class="fw-bold text-muted small"><i class="fa fa-filter me-1"></i>Filtrar Granja:</span>
-                        <field name="selected_granja_id" options="{'no_create': True, 'no_open': True}" placeholder="Todas las granjas" style="min-width: 220px;"/>
+                        <field name="selected_granja_id" options="{'no_create': True, 'no_open': True}" placeholder="Todas las granjas" style="min-width: 200px;"/>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button name="action_new_despacho_alimento" string="+ Despachar Alimento" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
-                        <button name="action_new_consumo_alimento" string="+ Registrar Consumo" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
-                        <button name="action_load_demo_alimento" string="⚡ Cargar Demo Alimento" type="object" class="btn btn-sm btn-outline-success" style="border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <button name="action_new_despacho_alimento" string="+ Despacho a Silo" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
+                        <button name="action_new_consumo_alimento" string="+ Registrar Consumo" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
+                        <button name="action_open_despachos_alimento" string="🚚 Envíos a Silos" type="object" class="btn btn-sm btn-outline-dark" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
+                        <button name="action_open_consumos_alimento" string="🍽️ Consumos" type="object" class="btn btn-sm btn-outline-success" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
+                        <button name="action_open_consumo_grafica" string="📊 Analítica Dinámica" type="object" class="btn btn-sm btn-outline-info" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
                     </div>
                 </header>
                 <sheet style="max-width: 100% !important; width: 100% !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important;">

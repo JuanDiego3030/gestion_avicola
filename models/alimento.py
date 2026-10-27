@@ -295,83 +295,79 @@ class AvicolaAlimentoDashboard(models.Model):
             rec._compute_metrics()
 
             domain = [('granja_id', '=', rec.selected_granja_id.id)] if rec.selected_granja_id else []
-            despachos = self.env['avicola.alimento.despacho'].search([('estado', '=', 'confirmado')] + domain, limit=5, order='fecha desc')
-            consumos = self.env['avicola.alimento.consumo'].search([('estado', '=', 'confirmado')] + domain, limit=5, order='fecha desc')
+            despachos = self.env['avicola.alimento.despacho'].search([('estado', '=', 'confirmado')] + domain, limit=5, order='fecha desc, id desc')
+            consumos = self.env['avicola.alimento.consumo'].search([('estado', '=', 'confirmado')] + domain, limit=5, order='fecha desc, id desc')
 
-            is_empty = (rec.despacho_total_kg == 0 and rec.consumo_total_kg == 0)
+            stock_kg = rec.stock_total_kg
+            stock_ton = rec.stock_total_ton
+            despacho_kg = rec.despacho_total_kg
+            consumo_kg = rec.consumo_total_kg
+            consumo_ave_gr = rec.consumo_promedio_dia_gr
 
-            stock_kg = rec.stock_total_kg if not is_empty else 18500.0
-            stock_ton = stock_kg / 1000.0
-            despacho_kg = rec.despacho_total_kg if not is_empty else 28000.0
-            consumo_kg = rec.consumo_total_kg if not is_empty else 9500.0
-            consumo_ave_gr = rec.consumo_promedio_dia_gr if not is_empty and rec.consumo_promedio_dia_gr > 0 else 105.0
-
-            # Desglose de consumo por tipo de alimento
+            # Desglose de consumo por tipo de alimento real
             tipos = self.env['avicola.alimento.tipo'].search([])
             breakdown_html = ""
-            colors = ["#144D34", "#34D399", "#3b82f6", "#f59e0b"]
-            for i, t in enumerate(tipos):
-                c = colors[i % len(colors)]
-                tipo_consumos = self.env['avicola.alimento.consumo'].search([
-                    ('tipo_alimento_id', '=', t.id),
-                    ('estado', '=', 'confirmado')
-                ] + domain)
-                kg = sum(tipo_consumos.mapped('cantidad_kg')) if not is_empty else (4200.0 if i == 0 else 3500.0 if i == 1 else 1800.0)
-                pct = ((kg / consumo_kg) * 100.0) if consumo_kg > 0 else 0.0
-
-                breakdown_html += f"""
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 5px;">
-                        <span>{t.name}</span>
-                        <span>{kg:,.0f} kg ({pct:.1f}%)</span>
-                    </div>
-                    <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
-                        <div style="width: {min(100, pct):.1f}%; height: 100%; background: {c}; border-radius: 999px;"></div>
-                    </div>
+            colors = ["#144D34", "#34D399", "#3b82f6", "#f59e0b", "#8b5cf6"]
+            if tipos and consumo_kg > 0:
+                for i, t in enumerate(tipos):
+                    c = colors[i % len(colors)]
+                    tipo_consumos = self.env['avicola.alimento.consumo'].search([
+                        ('tipo_alimento_id', '=', t.id),
+                        ('estado', '=', 'confirmado')
+                    ] + domain)
+                    kg = sum(tipo_consumos.mapped('cantidad_kg'))
+                    pct = ((kg / consumo_kg) * 100.0) if consumo_kg > 0 else 0.0
+                    if kg > 0:
+                        breakdown_html += f"""
+                        <div style="margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 5px;">
+                                <span>{html.escape(t.name)}</span>
+                                <span>{kg:,.0f} kg ({pct:.1f}%)</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                                <div style="width: {min(100, pct):.1f}%; height: 100%; background: {c}; border-radius: 999px;"></div>
+                            </div>
+                        </div>
+                        """
+            
+            if not breakdown_html:
+                breakdown_html = """
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px 0; text-align: center; color: #64748b;">
+                    <i class="fa fa-pie-chart" style="font-size: 28px; color: #cbd5e1; margin-bottom: 8px;"></i>
+                    <div style="font-size: 13px; font-weight: 600; color: #334155;">Sin consumos registrados</div>
+                    <div style="font-size: 11px; margin-bottom: 10px;">Registra el consumo diario de los galpones</div>
+                    <a href="/odoo/action-gestion_avicola.action_avicola_alimento_consumo" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Registrar Consumo</a>
                 </div>
                 """
 
-            # Recent Food Dispatches
+            # Recent Food Dispatches Reales
             recent_desp_html = ""
             if despachos:
                 for d in despachos:
                     dt = d.fecha.strftime('%d/%m/%Y') if d.fecha else 'Hoy'
                     recent_desp_html += f"""
-                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9;">
+                    <a href="/odoo/avicola.alimento.despacho/{d.id}" style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div style="width: 32px; height: 32px; border-radius: 8px; background: #144D3415; color: #144D34; display: flex; align-items: center; justify-content: center; font-size: 13px;">
                                 <i class="fa fa-truck"></i>
                             </div>
                             <div>
-                                <div style="font-size: 13px; font-weight: 600; color: #0f172a;">{d.name} • {d.granja_id.name}</div>
-                                <div style="font-size: 11px; color: #64748b;">{dt} • {d.tipo_alimento_id.name} • {d.presentacion.title()}</div>
+                                <div style="font-size: 13px; font-weight: 600; color: #0f172a;">{d.name} • {html.escape(d.granja_id.name)}</div>
+                                <div style="font-size: 11px; color: #64748b;">{dt} • {html.escape(d.tipo_alimento_id.name)} • {d.presentacion.title()}</div>
                             </div>
                         </div>
                         <span style="font-size: 12px; font-weight: 700; color: #144D34;">+{d.cantidad_kg:,.0f} kg</span>
-                    </div>
+                    </a>
                     """
             else:
-                demo_desp = [
-                    ('DSP-ALM-202610-001', 'Granja Los Pinos', 'Iniciador BB', '27/10/2026', 12000.0),
-                    ('DSP-ALM-202610-002', 'Granja Valle Verde', 'Engorde Plus', '26/10/2026', 8000.0),
-                    ('DSP-ALM-202610-003', 'Granja Los Pinos', 'Pre-iniciador', '25/10/2026', 5000.0),
-                    ('DSP-ALM-202610-004', 'Granja Valle Verde', 'Finalizador', '24/10/2026', 3000.0),
-                ]
-                for n, g, t, dt, kg in demo_desp:
-                    recent_desp_html += f"""
-                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="width: 32px; height: 32px; border-radius: 8px; background: #144D3415; color: #144D34; display: flex; align-items: center; justify-content: center; font-size: 13px;">
-                                <i class="fa fa-truck"></i>
-                            </div>
-                            <div>
-                                <div style="font-size: 13px; font-weight: 600; color: #0f172a;">{n} • {g}</div>
-                                <div style="font-size: 11px; color: #64748b;">{dt} • {t}</div>
-                            </div>
-                        </div>
-                        <span style="font-size: 12px; font-weight: 700; color: #144D34;">+{kg:,.0f} kg</span>
-                    </div>
-                    """
+                recent_desp_html = """
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px 0; text-align: center; color: #64748b;">
+                    <i class="fa fa-truck" style="font-size: 28px; color: #cbd5e1; margin-bottom: 8px;"></i>
+                    <div style="font-size: 13px; font-weight: 600; color: #334155;">Sin despachos de alimento registrados</div>
+                    <div style="font-size: 11px; margin-bottom: 10px;">Despacha alimento desde la planta o proveedor a los silos</div>
+                    <a href="/odoo/action-gestion_avicola.action_avicola_alimento_despacho" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Despachar Alimento</a>
+                </div>
+                """
 
             rec.dashboard_html = f"""
             <div style="background: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; border-radius: 20px; color: #0f172a;">
@@ -383,15 +379,15 @@ class AvicolaAlimentoDashboard(models.Model):
                         <p style="font-size: 13px; color: #64748b; margin: 0;">Supervisión de despachos a silos, stock disponible y consumo diario de aves.</p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <button type="object" name="action_new_despacho_alimento" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; border: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
+                        <a href="/odoo/action-gestion_avicola.action_avicola_alimento_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
                             <i class="fa fa-plus"></i> Despachar Alimento
-                        </button>
-                        <button type="object" name="action_new_consumo_alimento" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                        </a>
+                        <a href="/odoo/action-gestion_avicola.action_avicola_alimento_consumo" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa fa-cutlery"></i> Registrar Consumo
-                        </button>
-                        <button type="object" name="action_load_demo_alimento" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 14px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 5px;">
-                            <i class="fa fa-bolt" style="color: #10b981;"></i> Demo Alimento
-                        </button>
+                        </a>
+                        <a href="/odoo/action-gestion_avicola.action_avicola_alimento_graficas" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa fa-bar-chart"></i> Analítica Dinámica
+                        </a>
                     </div>
                 </div>
 
@@ -402,7 +398,7 @@ class AvicolaAlimentoDashboard(models.Model):
                     <div style="background-color: #144D34; border-radius: 18px; padding: 22px; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 6px 16px rgba(20,77,52,0.18);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #a7f3d0;">Stock Actual en Silos</span>
-                            <button type="object" name="action_open_granjas" style="width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: transparent; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #ffffff; cursor: pointer;">↗</button>
+                            <a href="/odoo/action-gestion_avicola.action_avicola_granja" title="Ver Granjas y Silos" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #ffffff; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #ffffff;">{stock_kg:,.0f} <span style="font-size: 16px; font-weight: 500;">kg</span></div>
                         <div>
@@ -416,12 +412,12 @@ class AvicolaAlimentoDashboard(models.Model):
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; color: #0f172a; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #64748b;">Alimento Despachado</span>
-                            <button type="object" name="action_open_despachos_alimento" style="width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: transparent; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</button>
+                            <a href="/odoo/action-gestion_avicola.action_avicola_alimento_despacho" title="Ver Despachos" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #0f172a;">{despacho_kg:,.0f} <span style="font-size: 16px; font-weight: 500; color: #64748b;">kg</span></div>
                         <div>
                             <span style="background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;">
-                                Envíos a Granjas Realizados
+                                Envíos a Silos Realizados
                             </span>
                         </div>
                     </div>
@@ -430,7 +426,7 @@ class AvicolaAlimentoDashboard(models.Model):
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; color: #0f172a; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #64748b;">Consumo Acumulado</span>
-                            <button type="object" name="action_open_consumos_alimento" style="width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: transparent; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</button>
+                            <a href="/odoo/action-gestion_avicola.action_avicola_alimento_consumo" title="Ver Consumos" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #0f172a;">{consumo_kg:,.0f} <span style="font-size: 16px; font-weight: 500; color: #64748b;">kg</span></div>
                         <div>
@@ -444,7 +440,7 @@ class AvicolaAlimentoDashboard(models.Model):
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; color: #0f172a; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #64748b;">Consumo Promedio</span>
-                            <div style="width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155;">★</div>
+                            <a href="/odoo/action-gestion_avicola.action_avicola_alimento_graficas" title="Ver Analítica Dinámica" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #0f172a;">{consumo_ave_gr:.1f} <span style="font-size: 16px; font-weight: 500; color: #64748b;">g</span></div>
                         <div>
@@ -466,7 +462,7 @@ class AvicolaAlimentoDashboard(models.Model):
                                 <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Consumo por Fase / Tipo de Alimento</h3>
                                 <div style="font-size: 12px; color: #64748b;">Distribución nutricional de la parvada</div>
                             </div>
-                            <button type="object" name="action_open_consumos_alimento" class="btn btn-link p-0 text-decoration-none" style="font-size: 12px; font-weight: 600; color: #144D34;">Ver Detalle →</button>
+                            <a href="/odoo/action-gestion_avicola.action_avicola_alimento_consumo" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Detalle →</a>
                         </div>
                         <div>
                             {breakdown_html}
@@ -480,7 +476,7 @@ class AvicolaAlimentoDashboard(models.Model):
                                 <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Últimos Despachos a Silos</h3>
                                 <div style="font-size: 12px; color: #64748b;">Abastecimiento de alimento por granja</div>
                             </div>
-                            <button type="object" name="action_new_despacho_alimento" class="btn btn-sm" style="background: #f1f5f9; color: #0f172a; border-radius: 999px; font-weight: 600; font-size: 11px; padding: 3px 10px; border: none;">+ Nuevo</button>
+                            <a href="/odoo/action-gestion_avicola.action_avicola_alimento_despacho" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Todos →</a>
                         </div>
                         <div>
                             {recent_desp_html}
@@ -501,15 +497,15 @@ class AvicolaAlimentoDashboard(models.Model):
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="object" name="action_open_consumo_grafica" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px;">
+                        <a href="/odoo/action-gestion_avicola.action_avicola_alimento_graficas" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px; text-decoration: none;">
                             <i class="fa fa-line-chart me-1"></i> Gráfica de Consumos
-                        </button>
-                        <button type="object" name="action_open_consumo_pivot" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px;">
+                        </a>
+                        <a href="/odoo/action-gestion_avicola.action_avicola_alimento_consumo" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px; text-decoration: none;">
                             <i class="fa fa-table me-1"></i> Tabla Pivot
-                        </button>
-                        <button type="object" name="action_open_despachos_grafica" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px;">
+                        </a>
+                        <a href="/odoo/action-gestion_avicola.action_avicola_alimento_despacho" class="btn btn-sm" style="background: #f1f5f9; color: #144D34; border-radius: 10px; font-weight: 600; font-size: 12px; padding: 8px 14px; text-decoration: none;">
                             <i class="fa fa-truck me-1"></i> Historial Despachos
-                        </button>
+                        </a>
                     </div>
                 </div>
 
