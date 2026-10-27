@@ -6,14 +6,14 @@
         <field name="name">avicola.granja.list</field>
         <field name="model">avicola.granja</field>
         <field name="arch" type="xml">
-            <list string="Granjas de Engorde">
+            <tree string="Granjas de Engorde">
                 <field name="name"/>
                 <field name="tipo"/>
                 <field name="ubicacion"/>
                 <field name="total_galpones"/>
                 <field name="total_aves"/>
                 <field name="metros_totales"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -41,13 +41,13 @@
                     <notebook>
                         <page string="Galpones">
                             <field name="galpon_ids">
-                                <list editable="bottom">
+                                <tree editable="bottom">
                                     <field name="name"/>
                                     <field name="metros_cuadrados"/>
                                     <field name="capacidad_maxima"/>
                                     <field name="cantidad_actual"/>
                                     <field name="densidad_actual" readonly="1"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
                     </notebook>
@@ -59,7 +59,7 @@
     <record id="action_avicola_granja" model="ir.actions.act_window">
         <field name="name">Granjas de Engorde</field>
         <field name="res_model">avicola.granja</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Registra tu primera granja de engorde.</p>
         </field>
@@ -71,7 +71,7 @@
         <field name="name">avicola.galpon.list</field>
         <field name="model">avicola.galpon</field>
         <field name="arch" type="xml">
-            <list string="Galpones">
+            <tree string="Galpones">
                 <field name="granja_id"/>
                 <field name="name"/>
                 <field name="metros_cuadrados"/>
@@ -79,7 +79,7 @@
                 <field name="cantidad_actual"/>
                 <field name="densidad_actual"/>
                 <field name="total_mortalidad"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -108,12 +108,12 @@
                     <notebook>
                         <page string="Historial de Mortalidad">
                             <field name="mortalidad_ids" readonly="1">
-                                <list>
+                                <tree>
                                     <field name="fecha"/>
                                     <field name="cantidad"/>
                                     <field name="observaciones"/>
                                     <field name="estado" widget="badge"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
                     </notebook>
@@ -152,7 +152,7 @@
     <record id="action_avicola_galpon" model="ir.actions.act_window">
         <field name="name">Galpones</field>
         <field name="res_model">avicola.galpon</field>
-        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
     </record>
 
 
@@ -161,14 +161,14 @@
         <field name="name">avicola.distribucion.list</field>
         <field name="model">avicola.distribucion</field>
         <field name="arch" type="xml">
-            <list string="Distribución de Pollitos" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+            <tree string="Distribución de Pollitos" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
                 <field name="lote_incubadora"/>
                 <field name="fecha"/>
                 <field name="granja_id"/>
                 <field name="galpon_id"/>
                 <field name="cantidad"/>
                 <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -222,7 +222,7 @@
     <record id="action_avicola_distribucion" model="ir.actions.act_window">
         <field name="name">Distribución de Pollitos</field>
         <field name="res_model">avicola.distribucion</field>
-        <field name="view_mode">list,form,graph</field>
+        <field name="view_mode">tree,form,graph</field>
     </record>
 
 
@@ -231,14 +231,14 @@
         <field name="name">avicola.mortalidad.list</field>
         <field name="model">avicola.mortalidad</field>
         <field name="arch" type="xml">
-            <list string="Mortalidad de Aves" decoration-danger="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+            <tree string="Mortalidad de Aves" decoration-danger="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
                 <field name="lote_incubadora"/>
                 <field name="fecha"/>
                 <field name="granja_id"/>
                 <field name="galpon_id"/>
                 <field name="cantidad"/>
                 <field name="estado" widget="badge" decoration-danger="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -286,7 +286,7 @@
     <record id="action_avicola_mortalidad" model="ir.actions.act_window">
         <field name="name">Mortalidad de Aves</field>
         <field name="res_model">avicola.mortalidad</field>
-        <field name="view_mode">list,form,graph</field>
+        <field name="view_mode">tree,form,graph</field>
     </record>
 
 
@@ -294,7 +294,7 @@
     <record id="action_avicola_salida" model="ir.actions.act_window">
         <field name="name">Despachos a Matadero</field>
         <field name="res_model">avicola.despacho</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
 
@@ -303,7 +303,7 @@
         <field name="name">avicola.despacho.list</field>
         <field name="model">avicola.despacho</field>
         <field name="arch" type="xml">
-            <list string="Salidas a Matadero / Despachos" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
+            <tree string="Salidas a Matadero / Despachos" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="granja"/>
@@ -315,7 +315,7 @@
                 <field name="chofer"/>
                 <field name="placa"/>
                 <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'" decoration-danger="estado == 'cancelado'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -397,7 +397,7 @@
     <record id="action_avicola_despacho" model="ir.actions.act_window">
         <field name="name">Salidas a Matadero / Despachos</field>
         <field name="res_model">avicola.despacho</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Registra una salida o despacho de aves listas para matadero.</p>
         </field>
@@ -409,12 +409,12 @@
         <field name="name">avicola.veterinario.list</field>
         <field name="model">avicola.veterinario</field>
         <field name="arch" type="xml">
-            <list string="Veterinarios">
+            <tree string="Veterinarios">
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="granja_ids" widget="many2many_tags"/>
                 <field name="active"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -445,7 +445,7 @@
     <record id="action_avicola_veterinario" model="ir.actions.act_window">
         <field name="name">Veterinarios</field>
         <field name="res_model">avicola.veterinario</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
 
@@ -454,13 +454,13 @@
         <field name="name">avicola.plan.vacunacion.list</field>
         <field name="model">avicola.plan.vacunacion</field>
         <field name="arch" type="xml">
-            <list string="Planificaciones de Vacunación" decoration-success="state == 'realizado'" decoration-info="state == 'programado'" decoration-muted="state == 'borrador'">
+            <tree string="Planificaciones de Vacunación" decoration-success="state == 'realizado'" decoration-info="state == 'programado'" decoration-muted="state == 'borrador'">
                 <field name="name"/>
                 <field name="veterinario_id"/>
                 <field name="granja_id"/>
                 <field name="fecha_planificada"/>
                 <field name="state" widget="badge" decoration-success="state == 'realizado'" decoration-info="state == 'programado'" decoration-warning="state == 'borrador'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -499,7 +499,7 @@
     <record id="action_avicola_plan_vacunacion" model="ir.actions.act_window">
         <field name="name">Planificaciones de Vacunación</field>
         <field name="res_model">avicola.plan.vacunacion</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
 
