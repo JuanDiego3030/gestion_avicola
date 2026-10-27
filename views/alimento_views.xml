@@ -306,24 +306,11 @@
         <field name="model">avicola.alimento.dashboard</field>
         <field name="arch" type="xml">
             <form string="Dashboard de Alimento" create="false" delete="false" class="o_avicola_dashboard_form">
-                <header class="d-flex justify-content-between align-items-center px-4 py-2 bg-white border-bottom shadow-sm">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fw-bold text-muted small"><i class="fa fa-filter me-1"></i>Filtrar Granja:</span>
-                        <field name="selected_granja_id" options="{'no_create': True, 'no_open': True}" placeholder="Todas las granjas" style="min-width: 200px;"/>
-                    </div>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <button name="action_new_despacho_alimento" string="+ Despacho a Silo" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
-                        <button name="action_new_consumo_alimento" string="+ Registrar Consumo" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
-                        <button name="action_open_despachos_alimento" string="🚚 Envíos a Silos" type="object" class="btn btn-sm btn-outline-dark" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
-                        <button name="action_open_consumos_alimento" string="🍽️ Consumos" type="object" class="btn btn-sm btn-outline-success" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
-                        <button name="action_open_consumo_grafica" string="📊 Analítica Dinámica" type="object" class="btn btn-sm btn-outline-info" style="border-radius: 999px; font-weight: 600; padding: 6px 14px;"/>
-                    </div>
-                </header>
                 <sheet style="max-width: 100% !important; width: 100% !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important;">
                     <style>
                         .o_avicola_dashboard_form .o_form_sheet_bg {
-                            background-color: #f1f5f9 !important;
-                            padding: 16px !important;
+                            background-color: #f8fafc !important;
+                            padding: 20px 24px 0 24px !important;
                         }
                         .o_avicola_dashboard_form .o_form_sheet {
                             background: transparent !important;
@@ -331,7 +318,69 @@
                             border: none !important;
                             max-width: 100% !important;
                         }
+                        .avicola-dash-top-bar {
+                            background: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 18px;
+                            padding: 18px 24px;
+                            margin-bottom: 20px;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            flex-wrap: wrap;
+                            gap: 16px;
+                        }
+                        .avicola-filter-pill {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;
+                            background: #f8fafc;
+                            border: 1.5px solid #cbd5e1;
+                            border-radius: 999px;
+                            padding: 6px 16px;
+                        }
+                        @media (max-width: 991px) {
+                            .o_avicola_dashboard_form .o_form_sheet_bg {
+                                padding: 12px 8px 0 8px !important;
+                            }
+                            .avicola-dash-top-bar {
+                                padding: 14px 12px !important;
+                                flex-direction: column !important;
+                                align-items: stretch !important;
+                                gap: 14px !important;
+                            }
+                            .avicola-top-actions {
+                                flex-direction: column !important;
+                                width: 100% !important;
+                                gap: 8px !important;
+                            }
+                            .avicola-top-actions .btn,
+                            .avicola-filter-pill {
+                                width: 100% !important;
+                                box-sizing: border-box !important;
+                            }
+                        }
                     </style>
+
+                    <!-- HEADER DEL DASHBOARD CON FILTRO DE GRANJA INTEGRADO -->
+                    <div class="avicola-dash-top-bar">
+                        <div>
+                            <h1 style="font-size: 26px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; letter-spacing: -0.5px;">Gestión y Control de Alimento</h1>
+                            <p style="font-size: 13px; color: #64748b; margin: 0;">Supervisión de despachos a silos, stock disponible y consumo diario de aves.</p>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap avicola-top-actions">
+                            <div class="avicola-filter-pill">
+                                <i class="fa fa-filter text-muted"></i>
+                                <span class="fw-bold text-dark small">Granja:</span>
+                                <field name="selected_granja_id" options="{'no_create': True, 'no_open': True}" placeholder="Todas las granjas" class="mb-0" style="min-width: 170px;"/>
+                            </div>
+                            <button name="action_new_despacho_alimento" string="+ Despachar Alimento" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 7px 16px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);"/>
+                            <button name="action_new_consumo_alimento" string="Registrar Consumo" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 7px 16px;"/>
+                            <button name="action_open_consumo_grafica" string="Analítica Dinámica" type="object" class="btn btn-sm btn-outline-info" style="border-radius: 999px; font-weight: 600; padding: 7px 16px;"/>
+                        </div>
+                    </div>
+
                     <field name="dashboard_html" widget="html" readonly="1" nolabel="1"/>
                 </sheet>
             </form>
