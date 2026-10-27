@@ -625,7 +625,7 @@ class AvicolaDashboard(models.Model):
                     <i class="fa fa-home" style="font-size: 28px; color: #cbd5e1; margin-bottom: 8px;"></i>
                     <div style="font-size: 13px; font-weight: 600; color: #334155;">Sin galpones registrados</div>
                     <div style="font-size: 11px; margin-bottom: 10px;">Registra galpones para monitorear su ocupación</div>
-                    <a href="/odoo/action-gestion_avicola.action_avicola_galpon" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Registrar Galpón</a>
+                    <a href="/web#action=gestion_avicola.action_avicola_galpon" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Registrar Galpón</a>
                 </div>
                 """
 
@@ -642,7 +642,7 @@ class AvicolaDashboard(models.Model):
                     st_bg = "#dcfce7" if d.estado == 'confirmado' else "#fef3c7" if d.estado == 'borrador' else "#fee2e2"
                     st_color = "#15803d" if d.estado == 'confirmado' else "#b45309" if d.estado == 'borrador' else "#b91c1c"
                     recent_items_html += f"""
-                    <a href="/odoo/avicola.despacho/{d.id}" style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit;">
+                    <a href="/web#id={d.id}&model=avicola.despacho&view_type=form" style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div style="width: 30px; height: 30px; border-radius: 8px; background: {c}15; color: {c}; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">
                                 <i class="fa fa-truck"></i>
@@ -661,7 +661,7 @@ class AvicolaDashboard(models.Model):
                     <i class="fa fa-truck" style="font-size: 28px; color: #cbd5e1; margin-bottom: 8px;"></i>
                     <div style="font-size: 13px; font-weight: 600; color: #334155;">Sin despachos recientes</div>
                     <div style="font-size: 11px; margin-bottom: 10px;">Registra salidas a matadero de aves vivas</div>
-                    <a href="/odoo/action-gestion_avicola.action_avicola_despacho" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Nuevo Despacho</a>
+                    <a href="/web#action=gestion_avicola.action_avicola_despacho" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Nuevo Despacho</a>
                 </div>
                 """
 
@@ -691,7 +691,7 @@ class AvicolaDashboard(models.Model):
                     _, bg = avatars[i % len(avatars)]
                     farm_names = ", ".join(v.granja_ids.mapped('name')) if v.granja_ids else "Todas las granjas"
                     team_html += f"""
-                    <a href="/odoo/avicola.veterinario/{v.id}" style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit;">
+                    <a href="/web#id={v.id}&model=avicola.veterinario&view_type=form" style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div style="width: 34px; height: 34px; border-radius: 50%; background: {bg}; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">{init}</div>
                             <div>
@@ -708,7 +708,7 @@ class AvicolaDashboard(models.Model):
                     <i class="fa fa-user-md" style="font-size: 28px; color: #cbd5e1; margin-bottom: 8px;"></i>
                     <div style="font-size: 13px; font-weight: 600; color: #334155;">Sin veterinarios registrados</div>
                     <div style="font-size: 11px; margin-bottom: 10px;">Asigna el equipo veterinario y técnico</div>
-                    <a href="/odoo/action-gestion_avicola.action_avicola_veterinario" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Registrar Veterinario</a>
+                    <a href="/web#action=gestion_avicola.action_avicola_veterinario" class="btn btn-sm" style="background: #144D34; color: white; border-radius: 999px; padding: 5px 14px; font-size: 11px; text-decoration: none;">+ Registrar Veterinario</a>
                 </div>
                 """
 
@@ -722,16 +722,16 @@ class AvicolaDashboard(models.Model):
                         <p style="font-size: 13px; color: #64748b; margin: 0;">Planifica, supervisa y optimiza tus operaciones avícolas con facilidad.</p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <a href="/odoo/action-gestion_avicola.action_avicola_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
+                        <a href="/web#action=gestion_avicola.action_avicola_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
                             <i class="fa fa-plus"></i> Nuevo Despacho
                         </a>
-                        <a href="/odoo/action-gestion_avicola.action_avicola_distribucion" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="/web#action=gestion_avicola.action_avicola_distribucion" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa fa-truck"></i> Distribuir Pollitos
                         </a>
-                        <a href="/odoo/action-gestion_avicola.action_avicola_proyeccion_lote" class="btn btn-sm" style="background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="/web#action=gestion_avicola.action_avicola_proyeccion_lote" class="btn btn-sm" style="background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa fa-line-chart"></i> Proyecciones Saca
                         </a>
-                        <a href="/odoo/action-gestion_avicola.action_avicola_galpon" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="/web#action=gestion_avicola.action_avicola_galpon" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa fa-th-large"></i> Ver Galpones
                         </a>
                     </div>
@@ -744,7 +744,7 @@ class AvicolaDashboard(models.Model):
                     <div style="background-color: #144D34; border-radius: 18px; padding: 22px; color: #ffffff; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 6px 16px rgba(20,77,52,0.18);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #a7f3d0;">Población Total Aves</span>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_galpon" title="Ver Galpones" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #ffffff; cursor: pointer;">↗</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_galpon" title="Ver Galpones" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #ffffff; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #ffffff;">{total_aves:,.0f}</div>
                         <div>
@@ -758,7 +758,7 @@ class AvicolaDashboard(models.Model):
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; color: #0f172a; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #64748b;">Galpones Activos</span>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_galpon" title="Ver Galpones" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_galpon" title="Ver Galpones" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #0f172a;">{galpones_activos}</div>
                         <div>
@@ -772,7 +772,7 @@ class AvicolaDashboard(models.Model):
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; color: #0f172a; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #64748b;">Pollitos Ingresados</span>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_distribucion" title="Ver Distribuciones" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_distribucion" title="Ver Distribuciones" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #0f172a;">{pollitos:,.0f}</div>
                         <div>
@@ -786,7 +786,7 @@ class AvicolaDashboard(models.Model):
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; color: #0f172a; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 13px; font-weight: 600; color: #64748b;">Despachos Matadero</span>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_despacho" title="Ver Despachos" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_despacho" title="Ver Despachos" style="text-decoration: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #334155; cursor: pointer;">↗</a>
                         </div>
                         <div style="font-size: 34px; font-weight: 800; line-height: 1; margin: 14px 0; color: #0f172a;">{despachos_count}</div>
                         <div>
@@ -808,7 +808,7 @@ class AvicolaDashboard(models.Model):
                                 <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Ocupación por Galpón</h3>
                                 <div style="font-size: 12px; color: #64748b;">Nivel de carga y capacidad por nave</div>
                             </div>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_galpon" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Detalle →</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_galpon" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Detalle →</a>
                         </div>
                         <div style="display: flex; justify-content: space-around; align-items: flex-end; height: 160px; padding-top: 10px;">
                             {bars_html}
@@ -826,7 +826,7 @@ class AvicolaDashboard(models.Model):
                             </div>
                         </div>
                         <div style="margin-top: 20px;">
-                            <a href="/odoo/action-gestion_avicola.action_avicola_plan_vacunacion" style="display: block; text-align: center; text-decoration: none; background: #144D34; color: white; border-radius: 12px; padding: 10px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 10px rgba(20,77,52,0.15);">
+                            <a href="/web#action=gestion_avicola.action_avicola_plan_vacunacion" style="display: block; text-align: center; text-decoration: none; background: #144D34; color: white; border-radius: 12px; padding: 10px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 10px rgba(20,77,52,0.15);">
                                 <i class="fa fa-calendar-check-o me-1"></i> Ver Planificación
                             </a>
                         </div>
@@ -836,7 +836,7 @@ class AvicolaDashboard(models.Model):
                     <div style="grid-column: span 4; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Despachos Recientes</h3>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_despacho" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Todos →</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_despacho" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Todos →</a>
                         </div>
                         <div>
                             {recent_items_html}
@@ -852,7 +852,7 @@ class AvicolaDashboard(models.Model):
                     <div style="grid-column: span 5; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Equipo Veterinario y Campo</h3>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_veterinario" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Equipo →</a>
+                            <a href="/web#action=gestion_avicola.action_avicola_veterinario" style="font-size: 12px; font-weight: 600; color: #144D34; text-decoration: none;">Ver Equipo →</a>
                         </div>
                         <div>
                             {team_html}
@@ -869,13 +869,13 @@ class AvicolaDashboard(models.Model):
                             {gauge_svg}
                         </div>
                         <div style="display: flex; justify-content: center; gap: 14px; margin-top: 10px; font-size: 11px; color: #475569; font-weight: 500; flex-wrap: wrap;">
-                            <a href="/odoo/action-gestion_avicola.action_avicola_galpon" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: inherit;">
+                            <a href="/web#action=gestion_avicola.action_avicola_galpon" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: inherit;">
                                 <span style="width: 8px; height: 8px; border-radius: 50%; background: #144D34;"></span> En Engorde ({ocupacion_pct:.0f}%)
                             </a>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_despacho" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: inherit;">
+                            <a href="/web#action=gestion_avicola.action_avicola_despacho" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: inherit;">
                                 <span style="width: 8px; height: 8px; border-radius: 50%; background: #34D399;"></span> Despachado
                             </a>
-                            <a href="/odoo/action-gestion_avicola.action_avicola_galpon" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: inherit;">
+                            <a href="/web#action=gestion_avicola.action_avicola_galpon" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: inherit;">
                                 <span style="width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1;"></span> Libre
                             </a>
                         </div>
@@ -889,7 +889,7 @@ class AvicolaDashboard(models.Model):
                             <div style="font-size: 12px; color: #d1fae5; opacity: 0.9;">Tasa de Mortalidad Acumulada</div>
                         </div>
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;">
-                            <a href="/odoo/action-gestion_avicola.action_avicola_mortalidad" style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #a7f3d0; text-decoration: none;">
+                            <a href="/web#action=gestion_avicola.action_avicola_mortalidad" style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #a7f3d0; text-decoration: none;">
                                 <i class="fa fa-check-circle"></i> {"Óptimo (< 3.0%)" if mortalidad_pct <= 3.0 else "Revisar Galpones"}
                             </a>
                             <span style="background: rgba(255,255,255,0.15); padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; color: #ffffff;">

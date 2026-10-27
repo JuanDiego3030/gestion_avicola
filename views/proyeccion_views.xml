@@ -6,7 +6,7 @@
         <field name="name">avicola.proyeccion.config.list</field>
         <field name="model">avicola.proyeccion.config</field>
         <field name="arch" type="xml">
-            <list string="Perfiles de Configuración de Proyección">
+            <tree string="Perfiles de Configuración de Proyección">
                 <field name="name"/>
                 <field name="edad_objetivo_dias"/>
                 <field name="peso_objetivo_kg"/>
@@ -17,7 +17,7 @@
                 <field name="jaulas_por_camion"/>
                 <field name="precio_estimado_kg"/>
                 <field name="active" widget="boolean_toggle"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -67,7 +67,7 @@
     <record id="action_avicola_proyeccion_config" model="ir.actions.act_window">
         <field name="name">Configuración de Proyecciones</field>
         <field name="res_model">avicola.proyeccion.config</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Define los parámetros zootécnicos y logísticos para proyectar la saca de los lotes.</p>
         </field>
@@ -79,7 +79,7 @@
         <field name="name">avicola.proyeccion.lote.list</field>
         <field name="model">avicola.proyeccion.lote</field>
         <field name="arch" type="xml">
-            <list string="Proyecciones de Lotes a Sacar"
+            <tree string="Proyecciones de Lotes a Sacar"
                   decoration-danger="estado == 'listo'"
                   decoration-warning="estado == 'proximo'"
                   decoration-info="estado == 'crecimiento'"
@@ -104,7 +104,7 @@
                        decoration-info="estado == 'crecimiento'"
                        decoration-primary="estado == 'en_proceso'"
                        decoration-success="estado == 'sacado'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -123,7 +123,7 @@
                             type="object" class="btn-outline-dark"
                             invisible="estado in ('crecimiento', 'sacado')"/>
                     <field name="estado" widget="statusbar"
-                           statusbar_visible="crecimiento,proximo,listo,en_proceso,sacado"/>
+                           statusbar_visible="crecimiento,proximo,treeo,en_proceso,sacado"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -310,7 +310,7 @@
     <record id="action_avicola_proyeccion_lote" model="ir.actions.act_window">
         <field name="name">Lotes a Sacar</field>
         <field name="res_model">avicola.proyeccion.lote</field>
-        <field name="view_mode">list,form,calendar,graph,pivot</field>
+        <field name="view_mode">tree,form,calendar,graph,pivot</field>
         <field name="search_view_id" ref="view_avicola_proyeccion_lote_search"/>
         <field name="context">{'search_default_filter_listos': 0, 'search_default_filter_proximos': 0}</field>
         <field name="help" type="html">
@@ -321,7 +321,7 @@
     <record id="action_avicola_proyeccion_lote_calendar" model="ir.actions.act_window">
         <field name="name">Calendario de Sacas a Matadero</field>
         <field name="res_model">avicola.proyeccion.lote</field>
-        <field name="view_mode">calendar,list,form</field>
+        <field name="view_mode">calendar,tree,form</field>
         <field name="search_view_id" ref="view_avicola_proyeccion_lote_search"/>
     </record>
 
