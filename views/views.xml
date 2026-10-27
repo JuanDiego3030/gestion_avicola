@@ -1,106 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ======== MENU (defined early to satisfy parent references) ======== -->
-
-    <!-- Stub action created early so menus can reference the dashboard action before
-         the full dashboard view is declared later in this file. It will be updated
-         when the full action/view records are processed. -->
-    <record id="action_avicola_dashboard_window" model="ir.actions.act_window">
-        <field name="name">Dashboard</field>
-        <field name="res_model">avicola.dashboard</field>
-        <field name="view_mode">form</field>
-        <field name="target">current</field>
-    </record>
-
-    <!-- Minimal stub actions so menus can reference actions before their full
-         view definitions appear later in this file. These will be updated when
-         the full action/view records are processed. -->
-    <record id="action_avicola_granja" model="ir.actions.act_window">
-        <field name="name">Granjas</field>
-        <field name="res_model">avicola.granja</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <record id="action_avicola_galpon" model="ir.actions.act_window">
-        <field name="name">Galpones</field>
-        <field name="res_model">avicola.galpon</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <record id="action_avicola_distribucion" model="ir.actions.act_window">
-        <field name="name">Distribuciones</field>
-        <field name="res_model">avicola.distribucion</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <record id="action_avicola_mortalidad" model="ir.actions.act_window">
-        <field name="name">Mortalidad</field>
-        <field name="res_model">avicola.mortalidad</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <record id="action_avicola_veterinario" model="ir.actions.act_window">
-        <field name="name">Veterinarios</field>
-        <field name="res_model">avicola.veterinario</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <record id="action_avicola_plan_vacunacion" model="ir.actions.act_window">
-        <field name="name">Planificaciones de Vacunación</field>
-        <field name="res_model">avicola.plan.vacunacion</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <record id="action_avicola_despacho" model="ir.actions.act_window">
-        <field name="name">Despachos</field>
-        <field name="res_model">avicola.despacho</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
-    </record>
-    <menuitem id="menu_avicola_root" name="Gestión Avícola" sequence="10"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-
-    <menuitem id="menu_avicola_dashboard" name="Dashboard"
-              parent="menu_avicola_root" action="action_avicola_dashboard_window" sequence="5"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-
-    <menuitem id="menu_avicola_config" name="Configuración"
-              parent="menu_avicola_root" sequence="20"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_granja" name="Granjas"
-              parent="menu_avicola_config" action="action_avicola_granja" sequence="10"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_galpon" name="Galpones"
-              parent="menu_avicola_config" action="action_avicola_galpon" sequence="20"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-
-    <menuitem id="menu_avicola_operaciones" name="Operaciones"
-              parent="menu_avicola_root" sequence="30"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_distribucion" name="Distribución de Pollitos"
-              parent="menu_avicola_operaciones" action="action_avicola_distribucion" sequence="10"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_mortalidad" name="Mortalidad de Aves"
-              parent="menu_avicola_operaciones" action="action_avicola_mortalidad" sequence="15"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_veterinario" name="Veterinarios"
-              parent="menu_avicola_config" action="action_avicola_veterinario" sequence="30"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_plan_vacunacion" name="Planificaciones de Vacunación"
-              parent="menu_avicola_operaciones" action="action_avicola_plan_vacunacion" sequence="30"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-
-
     <!-- ======== GRANJA ======== -->
     <record id="view_avicola_granja_list" model="ir.ui.view">
         <field name="name">avicola.granja.list</field>
         <field name="model">avicola.granja</field>
         <field name="arch" type="xml">
-            <list string="Granjas">
+            <list string="Granjas de Engorde">
                 <field name="name"/>
                 <field name="tipo"/>
                 <field name="ubicacion"/>
+                <field name="total_galpones"/>
+                <field name="total_aves"/>
+                <field name="metros_totales"/>
             </list>
         </field>
     </record>
@@ -109,12 +21,22 @@
         <field name="name">avicola.granja.form</field>
         <field name="model">avicola.granja</field>
         <field name="arch" type="xml">
-            <form string="Granja">
+            <form string="Granja de Engorde">
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre de la Granja"/>
+                        <h1><field name="name" placeholder="Ej. Granja Los Pinos"/></h1>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="tipo"/>
-                        <field name="ubicacion"/>
+                        <group>
+                            <field name="tipo" widget="radio"/>
+                            <field name="ubicacion"/>
+                        </group>
+                        <group>
+                            <field name="total_galpones" readonly="1"/>
+                            <field name="total_aves" readonly="1"/>
+                            <field name="metros_totales" readonly="1"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Galpones">
@@ -124,7 +46,7 @@
                                     <field name="metros_cuadrados"/>
                                     <field name="capacidad_maxima"/>
                                     <field name="cantidad_actual"/>
-                                    <field name="densidad_actual"/>
+                                    <field name="densidad_actual" readonly="1"/>
                                 </list>
                             </field>
                         </page>
@@ -135,10 +57,14 @@
     </record>
 
     <record id="action_avicola_granja" model="ir.actions.act_window">
-        <field name="name">Granjas</field>
+        <field name="name">Granjas de Engorde</field>
         <field name="res_model">avicola.granja</field>
         <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Registra tu primera granja de engorde.</p>
+        </field>
     </record>
+
 
     <!-- ======== GALPON ======== -->
     <record id="view_avicola_galpon_list" model="ir.ui.view">
@@ -152,6 +78,7 @@
                 <field name="capacidad_maxima"/>
                 <field name="cantidad_actual"/>
                 <field name="densidad_actual"/>
+                <field name="total_mortalidad"/>
             </list>
         </field>
     </record>
@@ -162,31 +89,79 @@
         <field name="arch" type="xml">
             <form string="Galpón">
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Identificador del Galpón"/>
+                        <h1><field name="name" placeholder="Ej. Galpón 01"/></h1>
+                    </div>
                     <group>
-                        <field name="granja_id"/>
-                        <field name="name"/>
-                        <field name="metros_cuadrados"/>
-                        <field name="capacidad_maxima"/>
-                        <field name="cantidad_actual"/>
-                        <field name="densidad_actual" readonly="1"/>
+                        <group>
+                            <field name="granja_id"/>
+                            <field name="metros_cuadrados"/>
+                            <field name="capacidad_maxima"/>
+                        </group>
+                        <group>
+                            <field name="cantidad_actual"/>
+                            <field name="densidad_actual" readonly="1"/>
+                            <field name="total_mortalidad" readonly="1"/>
+                        </group>
                     </group>
+                    <notebook>
+                        <page string="Historial de Mortalidad">
+                            <field name="mortalidad_ids" readonly="1">
+                                <list>
+                                    <field name="fecha"/>
+                                    <field name="cantidad"/>
+                                    <field name="observaciones"/>
+                                    <field name="estado" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="view_avicola_galpon_graph" model="ir.ui.view">
+        <field name="name">avicola.galpon.graph</field>
+        <field name="model">avicola.galpon</field>
+        <field name="arch" type="xml">
+            <graph string="Aves por Galpón" type="bar">
+                <field name="name"/>
+                <field name="granja_id"/>
+                <field name="cantidad_actual" type="measure"/>
+                <field name="densidad_actual" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_avicola_galpon_pivot" model="ir.ui.view">
+        <field name="name">avicola.galpon.pivot</field>
+        <field name="model">avicola.galpon</field>
+        <field name="arch" type="xml">
+            <pivot string="Resumen de Galpones">
+                <field name="granja_id" type="row"/>
+                <field name="name" type="row"/>
+                <field name="cantidad_actual" type="measure"/>
+                <field name="metros_cuadrados" type="measure"/>
+                <field name="densidad_actual" type="measure"/>
+            </pivot>
         </field>
     </record>
 
     <record id="action_avicola_galpon" model="ir.actions.act_window">
         <field name="name">Galpones</field>
         <field name="res_model">avicola.galpon</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,graph,pivot</field>
     </record>
 
-    <!-- ======== DISTRIBUCION ======== -->
+
+    <!-- ======== DISTRIBUCION DE POLLITOS ======== -->
     <record id="view_avicola_distribucion_list" model="ir.ui.view">
         <field name="name">avicola.distribucion.list</field>
         <field name="model">avicola.distribucion</field>
         <field name="arch" type="xml">
-            <list string="Distribuciones" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+            <list string="Distribución de Pollitos" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
                 <field name="lote_incubadora"/>
                 <field name="fecha"/>
                 <field name="granja_id"/>
@@ -203,7 +178,7 @@
         <field name="arch" type="xml">
             <form string="Distribución de Pollitos">
                 <header>
-                    <button name="action_confirmar" string="Confirmar" type="object"
+                    <button name="action_confirmar" string="Confirmar e Ingresar Aves" type="object"
                             class="btn-primary" invisible="estado == 'confirmado'"/>
                     <button name="action_borrador" string="Volver a Borrador" type="object"
                             invisible="estado == 'borrador'"/>
@@ -211,34 +186,51 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="lote_incubadora"/>
-                        <field name="fecha"/>
-                        <field name="granja_id"/>
-                        <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
-                        <field name="cantidad"/>
+                        <group>
+                            <field name="lote_incubadora"/>
+                            <field name="fecha"/>
+                        </group>
+                        <group>
+                            <field name="granja_id"/>
+                            <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                            <field name="cantidad"/>
+                        </group>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
+    <record id="view_avicola_distribucion_graph" model="ir.ui.view">
+        <field name="name">avicola.distribucion.graph</field>
+        <field name="model">avicola.distribucion</field>
+        <field name="arch" type="xml">
+            <graph string="Distribuciones por Granja" type="bar">
+                <field name="granja_id"/>
+                <field name="cantidad" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
     <record id="action_avicola_distribucion" model="ir.actions.act_window">
         <field name="name">Distribución de Pollitos</field>
         <field name="res_model">avicola.distribucion</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,graph</field>
     </record>
 
+
+    <!-- ======== MORTALIDAD ======== -->
     <record id="view_avicola_mortalidad_list" model="ir.ui.view">
         <field name="name">avicola.mortalidad.list</field>
         <field name="model">avicola.mortalidad</field>
         <field name="arch" type="xml">
-            <list string="Mortalidad de Aves" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+            <list string="Mortalidad de Aves" decoration-danger="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
                 <field name="lote_incubadora"/>
                 <field name="fecha"/>
                 <field name="granja_id"/>
                 <field name="galpon_id"/>
                 <field name="cantidad"/>
-                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
+                <field name="estado" widget="badge" decoration-danger="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
             </list>
         </field>
     </record>
@@ -249,111 +241,49 @@
         <field name="arch" type="xml">
             <form string="Registro de Mortalidad">
                 <header>
-                    <button name="action_confirmar" string="Confirmar" type="object" class="btn-primary" invisible="estado == 'confirmado'"/>
-                    <button name="action_borrador" string="Volver a Borrador" type="object" invisible="estado == 'borrador'"/>
+                    <button name="action_confirmar" string="Confirmar Mortalidad" type="object"
+                            class="btn-primary" invisible="estado == 'confirmado'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="estado == 'borrador'"/>
                     <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
                 </header>
                 <sheet>
                     <group>
-                        <field name="lote_incubadora" readonly="1"/>
-                        <field name="fecha"/>
-                        <field name="granja_id"/>
-                        <field name="galpon_id" domain="[('granja_id', '=', granja_id), ('cantidad_actual', '>', 0)]"/>
-                        <field name="cantidad"/>
-                        <field name="observaciones"/>
+                        <group>
+                            <field name="lote_incubadora" readonly="1"/>
+                            <field name="fecha"/>
+                            <field name="granja_id"/>
+                        </group>
+                        <group>
+                            <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                            <field name="cantidad"/>
+                            <field name="observaciones"/>
+                        </group>
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="view_avicola_mortalidad_graph" model="ir.ui.view">
+        <field name="name">avicola.mortalidad.graph</field>
+        <field name="model">avicola.mortalidad</field>
+        <field name="arch" type="xml">
+            <graph string="Mortalidad por Granja" type="bar">
+                <field name="granja_id"/>
+                <field name="cantidad" type="measure"/>
+            </graph>
         </field>
     </record>
 
     <record id="action_avicola_mortalidad" model="ir.actions.act_window">
         <field name="name">Mortalidad de Aves</field>
         <field name="res_model">avicola.mortalidad</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,graph</field>
     </record>
 
-    <record id="view_avicola_veterinario_list" model="ir.ui.view">
-        <field name="name">avicola.veterinario.list</field>
-        <field name="model">avicola.veterinario</field>
-        <field name="arch" type="xml">
-            <list string="Veterinarios">
-                <field name="name"/>
-                <field name="user_id"/>
-                <field name="granja_ids"/>
-                <field name="active"/>
-            </list>
-        </field>
-    </record>
 
-    <record id="view_avicola_veterinario_form" model="ir.ui.view">
-        <field name="name">avicola.veterinario.form</field>
-        <field name="model">avicola.veterinario</field>
-        <field name="arch" type="xml">
-            <form string="Veterinario">
-                <sheet>
-                    <group>
-                        <field name="user_id"/>
-                        <field name="granja_ids" widget="many2many_tags"/>
-                        <field name="active"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <record id="action_avicola_veterinario" model="ir.actions.act_window">
-        <field name="name">Veterinarios</field>
-        <field name="res_model">avicola.veterinario</field>
-        <field name="view_mode">list,form</field>
-    </record>
-
-    <record id="view_avicola_plan_vacunacion_list" model="ir.ui.view">
-        <field name="name">avicola.plan.vacunacion.list</field>
-        <field name="model">avicola.plan.vacunacion</field>
-        <field name="arch" type="xml">
-            <list string="Planificaciones de Vacunación">
-                <field name="name"/>
-                <field name="veterinario_id"/>
-                <field name="granja_id"/>
-                <field name="fecha_planificada"/>
-                <field name="state" widget="badge"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="view_avicola_plan_vacunacion_form" model="ir.ui.view">
-        <field name="name">avicola.plan.vacunacion.form</field>
-        <field name="model">avicola.plan.vacunacion</field>
-        <field name="arch" type="xml">
-            <form string="Planificación de Vacunación">
-                <header>
-                    <button name="action_programar" string="Programar" type="object" class="btn-primary"
-                            invisible="state != 'borrador'"/>
-                    <button name="action_realizar" string="Marcar Realizado" type="object" class="btn-success"
-                            invisible="state == 'realizado'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="borrador,programado,realizado"/>
-                </header>
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="veterinario_id"/>
-                        <field name="granja_id"/>
-                        <field name="fecha_planificada"/>
-                        <field name="descripcion"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <record id="action_avicola_plan_vacunacion" model="ir.actions.act_window">
-        <field name="name">Planificaciones de Vacunación</field>
-        <field name="res_model">avicola.plan.vacunacion</field>
-        <field name="view_mode">list,form</field>
-    </record>
-
-    <!-- ======== SALIDA ======== -->
+    <!-- ======== SALIDA A MATADERO ======== -->
     <record id="view_avicola_salida_list" model="ir.ui.view">
         <field name="name">avicola.salida.list</field>
         <field name="model">avicola.salida</field>
@@ -375,7 +305,7 @@
         <field name="arch" type="xml">
             <form string="Salida a Matadero">
                 <header>
-                    <button name="action_confirmar" string="Confirmar" type="object"
+                    <button name="action_confirmar" string="Confirmar Salida" type="object"
                             class="btn-primary" invisible="estado == 'confirmado'"/>
                     <button name="action_borrador" string="Volver a Borrador" type="object"
                             invisible="estado == 'borrador'"/>
@@ -383,38 +313,45 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="fecha"/>
-                        <field name="granja_id"/>
-                        <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
-                        <field name="cantidad"/>
-                        <field name="peso_total"/>
+                        <group>
+                            <field name="fecha"/>
+                            <field name="granja_id"/>
+                            <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                        </group>
+                        <group>
+                            <field name="cantidad"/>
+                            <field name="peso_total"/>
+                        </group>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- La acción original de Salidas apunta ahora a Despachos (los despachos reemplazan a las salidas) -->
     <record id="action_avicola_salida" model="ir.actions.act_window">
         <field name="name">Salidas a Matadero</field>
-        <field name="res_model">avicola.despacho</field>
+        <field name="res_model">avicola.salida</field>
         <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Esta vista muestra los despachos que reemplazan las salidas a matadero.</p>
-        </field>
     </record>
+
 
     <!-- ======== DESPACHO AVES VIVAS ======== -->
     <record id="view_avicola_despacho_list" model="ir.ui.view">
         <field name="name">avicola.despacho.list</field>
         <field name="model">avicola.despacho</field>
         <field name="arch" type="xml">
-            <list string="Despachos Aves Vivas">
+            <list string="Despachos de Aves Vivas" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
+                <field name="name"/>
                 <field name="fecha"/>
                 <field name="granja"/>
+                <field name="galpon_id"/>
                 <field name="cliente"/>
                 <field name="cantidad_aves"/>
                 <field name="peso_neto"/>
+                <field name="peso_promedio"/>
+                <field name="chofer"/>
+                <field name="placa"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'" decoration-danger="estado == 'cancelado'"/>
             </list>
         </field>
     </record>
@@ -423,369 +360,411 @@
         <field name="name">avicola.despacho.form</field>
         <field name="model">avicola.despacho</field>
         <field name="arch" type="xml">
-            <form string="Despacho Aves Vivas">
+            <form string="Despacho de Aves Vivas">
+                <header>
+                    <button name="action_confirm_despacho" string="Confirmar Despacho" type="object"
+                            class="btn-primary" invisible="estado != 'borrador'"/>
+                    <button name="action_print_ticket" string="Imprimir Ticket" type="object"
+                            class="btn-secondary" icon="fa-print"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="estado != 'confirmado'"/>
+                    <button name="action_cancelar" string="Cancelar" type="object"
+                            invisible="estado == 'cancelado'"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
+                </header>
                 <sheet>
-                    <group>
-                        <label for="company_name" string="DATOS FIJOS"/>
-                        <field name="company_name" readonly="1"/>
-                        <field name="company_rif" readonly="1"/>
-                        <field name="company_direccion" readonly="1"/>
-                    </group>
-                    <group>
-                        <field name="fecha"/>
-                        <field name="granja"/>
-                        <field name="cliente"/>
-                        <field name="placa"/>
-                        <field name="chofer"/>
-                    </group>
-                    <group>
-                        <field name="cant_jaulas"/>
-                        <field name="pollos_por_jaula"/>
-                        <field name="orden_compra"/>
-                        <field name="inicio_carga"/>
-                        <field name="final_carga"/>
-                    </group>
-                    <group>
-                        <field name="cuadrilla"/>
-                        <field name="cantidad_aves"/>
-                        <field name="peso_neto"/>
-                        <field name="peso_promedio" readonly="1"/>
-                        <field name="pollo_mojado"/>
-                    </group>
-                    <group>
-                        <field name="precinto_1"/>
-                        <field name="precinto_2"/>
-                        <field name="precinto"/>
-                        <field name="supervisor"/>
-                    </group>
-                    <footer>
-                        <button string="Imprimir Ticket" name="action_print_ticket" type="object" class="btn-primary"/>
-                        <button string="Cerrar" class="btn-secondary" special="cancel"/>
-                    </footer>
+                    <div class="oe_title">
+                        <label for="name" string="Ticket Nro"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    
+                    <notebook>
+                        <page string="Datos de Operación">
+                            <group>
+                                <group string="Origen y Destino">
+                                    <field name="fecha"/>
+                                    <field name="granja"/>
+                                    <field name="galpon_id" domain="[('granja_id', '=', granja)]"/>
+                                    <field name="cliente"/>
+                                    <field name="orden_compra"/>
+                                </group>
+                                <group string="Pesaje y Cantidades">
+                                    <field name="cantidad_aves"/>
+                                    <field name="cant_jaulas"/>
+                                    <field name="pollos_por_jaula"/>
+                                    <field name="peso_neto"/>
+                                    <field name="peso_promedio" readonly="1"/>
+                                    <field name="pollo_mojado" widget="radio"/>
+                                </group>
+                            </group>
+                            <group string="Transporte y Cuadrilla">
+                                <group>
+                                    <field name="chofer"/>
+                                    <field name="placa"/>
+                                    <field name="cuadrilla"/>
+                                </group>
+                                <group>
+                                    <field name="supervisor"/>
+                                    <field name="inicio_carga"/>
+                                    <field name="final_carga"/>
+                                </group>
+                            </group>
+                            <group string="Precintos">
+                                <field name="precinto_1"/>
+                                <field name="precinto_2"/>
+                                <field name="precinto"/>
+                            </group>
+                        </page>
+
+                        <page string="Datos de la Empresa y Salida">
+                            <group>
+                                <group string="Empresa Emisora">
+                                    <field name="company_name" readonly="1"/>
+                                    <field name="company_rif" readonly="1"/>
+                                    <field name="company_direccion" readonly="1"/>
+                                </group>
+                                <group string="Registro de Salida">
+                                    <field name="salida_id" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
     <record id="action_avicola_despacho" model="ir.actions.act_window">
-        <field name="name">Despachos Aves Vivas</field>
+        <field name="name">Despachos de Aves Vivas</field>
         <field name="res_model">avicola.despacho</field>
         <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea un nuevo despacho de aves listas para matadero.</p>
+        </field>
     </record>
 
-    
 
-    
-
-    
-
-    <menuitem id="menu_avicola_despacho" name="Despachos"
-              parent="menu_avicola_root" action="action_avicola_despacho" sequence="25"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-
-    <!-- ======== DASHBOARD MEJORADO ======== -->
-    <record id="view_avicola_dashboard_form" model="ir.ui.view">
-        <field name="name">avicola.dashboard.form</field>
-        <field name="model">avicola.dashboard</field>
+    <!-- ======== VETERINARIOS ======== -->
+    <record id="view_avicola_veterinario_list" model="ir.ui.view">
+        <field name="name">avicola.veterinario.list</field>
+        <field name="model">avicola.veterinario</field>
         <field name="arch" type="xml">
-            <form string="Panel de Control Avícola" class="avicola-dashboard-view" create="false" edit="false" delete="false">
-                <sheet style="max-width: 100% !important; width: 100% !important; background-color: #1a1924 !important; color: #ffffff; min-height: 100vh; padding: 24px; margin: 0 !important;">
-                    
-                    <!-- Truco CSS Inyectado para romper el contenedor blanco de Odoo y añadir efectos de transición -->
-                    <style>
-                        .avicola-dashboard-view .o_form_sheet_bg { background-color: #1a1924 !important; background: #1a1924 !important; padding: 0 !important; }
-                        .avicola-dashboard-view .o_form_sheet { border: none !important; box-shadow: none !important; max-width: 100% !important; background-color: #1a1924 !important; }
-                        .avicola-dashboard-view .o_form_view { background-color: #1a1924 !important; }
-                        .avicola-kpi-card { transition: all 0.25s ease-in-out; border: 1px solid #432447 !important; cursor: pointer; }
-                        .avicola-kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.5) !important; filter: brightness(1.15); }
-                        .avicola-btn-filter { border: 1px solid #58245c !important; color: #e2ccde !important; font-weight: 500; transition: all 0.2s; }
-                        .avicola-btn-filter:hover { background-color: #431b47 !important; color: #fff !important; }
-                        .avicola-btn-active { background-color: #722f77 !important; color: #ffffff !important; box-shadow: 0 0 10px rgba(114,47,119,0.5); }
-                    </style>
+            <list string="Veterinarios">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="granja_ids" widget="many2many_tags"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
 
-                    <!-- Cabecera de Filtros -->
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #282636;">
-                        <h2 style="color: #ffffff; font-weight: 700; margin: 0; letter-spacing: 0.5px;">Panel de Control General</h2>
-                        <div class="btn-group" role="group" style="border-radius: 8px; overflow: hidden;">
-                            <a role="button" data-range="today" class="btn avicola-btn-filter avicola-btn-active" style="padding: 8px 20px;">Hoy</a>
-                            <a role="button" data-range="week" class="btn avicola-btn-filter" style="padding: 8px 20px;">Esta Semana</a>
-                            <a role="button" data-range="month" class="btn avicola-btn-filter" style="padding: 8px 20px;">Este Mes</a>
-                            <a role="button" data-range="all" class="btn avicola-btn-filter" style="padding: 8px 20px;">Hasta Ahora</a>
-                        </div>
+    <record id="view_avicola_veterinario_form" model="ir.ui.view">
+        <field name="name">avicola.veterinario.form</field>
+        <field name="model">avicola.veterinario</field>
+        <field name="arch" type="xml">
+            <form string="Veterinario">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre del Veterinario"/>
+                        <h1><field name="name"/></h1>
                     </div>
-
-                    <!-- Grid de Tarjetas (KPIs) -->
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                        
-                        <!-- Tarjeta 1: Granjas -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-home"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-granjas">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Total Granjas</p>
-                                    <a role="button" data-action="open_granjas" href="/web#action=gestion_avicola.action_avicola_granja" class="btn btn-link text-white-50 p-0 text-decoration-none small style-hover" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Detalles →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 2: Galpones -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-building-o"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-galpones">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Galpones Activos</p>
-                                    <a role="button" data-action="open_galpones" href="/web#action=gestion_avicola.action_avicola_galpon" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Detalles →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 3: Población total de Aves -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-twitter"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-aves">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Población Actual Aves</p>
-                                    <a role="button" data-action="open_galpones" href="/web#action=gestion_avicola.action_avicola_galpon" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Inventario →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta X: Mortalidad (%) de la granja seleccionada -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #b9414a; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #ffd2d2;"><i class="fa fa-heartbeat"/></div>
-                                    <div class="mb-2" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                                        <select id="avicola-granja-select" class="form-select form-select-sm" style="max-width: 220px;">
-                                            <option value="">Selecciona una granja...</option>
-                                        </select>
-                                    </div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-mortalidad-percent">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #ffd6d6; letter-spacing: 0.8px;">Mortalidad (%) - Granja Seleccionada</p>
-                                    <a role="button" data-action="open_mortalidad" href="/web#action=gestion_avicola.action_avicola_mortalidad" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #ffe5e5 !important;">Ver Mortalidad →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 4: Veterinarios -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-user-md"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-veterinarios">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Veterinarios Activos</p>
-                                    <a role="button" data-action="open_veterinarios" href="/web#action=gestion_avicola.action_avicola_veterinario" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Veterinarios →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 5: Ingresos / Distribución -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-truck"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-ingresos">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Pollitos Ingresados</p>
-                                    <a role="button" data-action="open_distribuciones" href="/web#action=gestion_avicola.action_avicola_distribucion" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Historial →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 6: Salidas a Matadero -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-sign-out"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-salidas">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Aves Sacrificadas</p>
-                                    <a role="button" data-action="open_salidas" href="/web#action=gestion_avicola.action_avicola_salida" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Salidas →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 7: Peso Total Despachado -->
-                        <div class="col">
-                            <div class="card h-100 text-center text-white avicola-kpi-card" style="background-color: #5c2261; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
-                                <div class="card-body d-flex flex-column justify-content-between p-4">
-                                    <div style="font-size: 1.8rem; color: #f3c2ff;"><i class="fa fa-balance-scale"/></div>
-                                    <h1 class="display-5 font-weight-bold my-3" style="color: #ffffff; font-weight: 700;"><span id="avicola-total-peso">—</span></h1>
-                                    <p class="card-text text-uppercase font-weight-bold small mb-3" style="color: #dcb3e3; letter-spacing: 0.8px;">Total Kilos Vendidos</p>
-                                    <a role="button" data-action="open_salidas" href="/web#action=gestion_avicola.action_avicola_salida" class="btn btn-link text-white-50 p-0 text-decoration-none small" style="font-size: 0.85rem; color: #e9b3f0 !important;">Ver Rendimiento →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- Gráficas interactivas -->
-                    <div class="avicola-charts-row">
-                        <div class="row g-4">
-                            <div class="col-12 col-md-6">
-                                <div class="avicola-chart-card">
-                                    <div class="avicola-chart-title">Aves por Galpón</div>
-                                    <div class="mb-3">
-                                        <select id="avicola-granja-chart-select" class="form-select form-select-sm" style="max-width: 280px;">
-                                            <option value="">Selecciona una granja...</option>
-                                        </select>
-                                    </div>
-                                    <canvas id="chart_galpones" class="avicola-chart-canvas"></canvas>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="avicola-chart-card">
-                                    <div class="avicola-chart-title">Densidad por Galpón (aves/m²)</div>
-                                    <canvas id="chart_densidades" class="avicola-chart-canvas"></canvas>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="avicola-chart-card">
-                                    <div class="avicola-chart-title">Distribución de Aves</div>
-                                    <canvas id="chart_pie" class="avicola-chart-canvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <script type="text/javascript"><![CDATA[
-                    (function () {
-                        window.avicolaDashboardInlineLoaded = true;
-                        console.log('Dashboard inline script running');
-                        function loadChartJs(callback) {
-                            console.log('Dashboard loadChartJs start');
-                            if (window.Chart) { console.log('Chart.js already loaded'); callback(); return; }
-                            function trySourceFetch(src, onSuccess, onFail) {
-                                fetch(src, { credentials: 'same-origin' }).then(function (resp) {
-                                    if (!resp.ok) { throw new Error('HTTP ' + resp.status); }
-                                    return resp.text();
-                                }).then(function (text) {
-                                    var t = (text || '').trim();
-                                    if (t.indexOf('<') === 0) { throw new Error('Response appears to be HTML, not JS'); }
-                                    try { (0, eval)(text); onSuccess(); } catch (e) { onFail(e); }
-                                }).catch(function (err) { onFail(err); });
-                            }
-                            trySourceFetch('https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js', function () { callback(); }, function () {
-                                trySourceFetch('/web/content/gestion_avicola/static/src/lib/chart.min.js', function () { callback(); }, function () {
-                                    console.error('No se pudo cargar Chart.js');
-                                });
-                            });
-                        }
-
-                        // existing inline code continues (omitted for brevity)
-                        loadChartJs(function () {
-                            // placeholder callback to ensure Chart.js is attempted
-                        });
-                    })();
-                    ]]></script>
-                    <!-- Inline AMD module moved from static/src/js/dashboard.js -->
-                    <script type="text/javascript"><![CDATA[
-                    odoo.define('gestion_avicola.dashboard', ['web.rpc', 'web.core'], function (rpc, core) {
-    "use strict";
-
-    console.log('gestion_avicola.dashboard: script loaded');
-
-    function loadChartJs_module(callback) {
-        if (window.Chart) { callback(); return; }
-        var cdns = [
-            'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js',
-            'https://unpkg.com/chart.js@3.9.1/dist/chart.min.js'
-        ];
-        var attempt = 0;
-        function tryLoad() {
-            if (window.Chart) { callback(); return; }
-            if (attempt >= cdns.length) { console.error('No se pudo cargar Chart.js desde los CDNs:', cdns); return; }
-            var s = document.createElement('script');
-            s.src = cdns[attempt];
-            s.onload = function () { callback(); };
-            s.onerror = function () { attempt += 1; tryLoad(); };
-            document.head.appendChild(s);
-        }
-        tryLoad();
-    }
-
-    function renderCharts() {
-        // Prevent double-rendering using an internal flag instead of relying
-        // on `avicolaDashboardInlineLoaded` which is set elsewhere.
-        if (window._avicolaDashboardRendered) { return; }
-        var ctxA = document.getElementById('chart_galpones');
-        if (!ctxA) { setTimeout(renderCharts, 500); return; }
-
-        rpc.query({ model: 'avicola.galpon', method: 'search_read', args: [[], ['name', 'cantidad_actual', 'metros_cuadrados']] })
-        .then(function (data) {
-            var labels = data.map(function (d) { return d.name; });
-            var counts = data.map(function (d) { return d.cantidad_actual || 0; });
-            var densities = data.map(function (d) { return (d.metros_cuadrados && d.metros_cuadrados > 0) ? (d.cantidad_actual / d.metros_cuadrados) : 0; });
-
-            loadChartJs_module(function () {
-                try {
-                    if (ctxA) {
-                        new Chart(ctxA.getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ label: 'Aves por Galpón', data: counts, backgroundColor: '#722f77' }] }, options: { responsive: true, maintainAspectRatio: false } });
-                    }
-                    var ctxB = document.getElementById('chart_densidades');
-                    if (ctxB) { new Chart(ctxB.getContext('2d'), { type: 'line', data: { labels: labels, datasets: [{ label: 'Densidad (aves/m²)', data: densities, borderColor: '#e9b3f0', backgroundColor: 'rgba(233,179,240,0.15)', tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false } }); }
-                    var ctxC = document.getElementById('chart_pie');
-                    if (ctxC) { var palette = ['#5c2261', '#722f77', '#e9b3f0', '#dcb3e3', '#bca0bf']; new Chart(ctxC.getContext('2d'), { type: 'pie', data: { labels: labels, datasets: [{ data: counts, backgroundColor: labels.map(function (_, i) { return palette[i % palette.length]; }) }] }, options: { responsive: true, maintainAspectRatio: false } }); }
-                    // Mark as rendered so subsequent DOM updates don't re-create charts
-                    window._avicolaDashboardRendered = true;
-                } catch (e) { console.error('Error rendering charts', e); }
-            });
-        }).catch(function (err) { console.error('RPC error fetching galpones', err); });
-    }
-
-    core.bus.on('DOM_updated', null, renderCharts);
-    setTimeout(renderCharts, 400);
-});
-                    ]]></script>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="granja_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Assets moved to __manifest__.py to avoid load-time XML inheritance issues -->
-
-    <!-- Acción: abrir el formulario del dashboard -->
-    <record id="action_avicola_dashboard_window" model="ir.actions.act_window">
-        <field name="name">Dashboard</field>
-        <field name="res_model">avicola.dashboard</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="view_avicola_dashboard_form"/>
-        <field name="target">current</field>
-        <field name="context">{}</field>
+    <record id="action_avicola_veterinario" model="ir.actions.act_window">
+        <field name="name">Veterinarios</field>
+        <field name="res_model">avicola.veterinario</field>
+        <field name="view_mode">list,form</field>
     </record>
 
-    <!-- ======== MENU ======== -->
+
+    <!-- ======== PLANIFICACIONES DE VACUNACION ======== -->
+    <record id="view_avicola_plan_vacunacion_list" model="ir.ui.view">
+        <field name="name">avicola.plan.vacunacion.list</field>
+        <field name="model">avicola.plan.vacunacion</field>
+        <field name="arch" type="xml">
+            <list string="Planificaciones de Vacunación" decoration-success="state == 'realizado'" decoration-info="state == 'programado'" decoration-muted="state == 'borrador'">
+                <field name="name"/>
+                <field name="veterinario_id"/>
+                <field name="granja_id"/>
+                <field name="fecha_planificada"/>
+                <field name="state" widget="badge" decoration-success="state == 'realizado'" decoration-info="state == 'programado'" decoration-warning="state == 'borrador'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_plan_vacunacion_form" model="ir.ui.view">
+        <field name="name">avicola.plan.vacunacion.form</field>
+        <field name="model">avicola.plan.vacunacion</field>
+        <field name="arch" type="xml">
+            <form string="Planificación de Vacunación">
+                <header>
+                    <button name="action_programar" string="Programar" type="object" class="btn-primary"
+                            invisible="state != 'borrador'"/>
+                    <button name="action_realizar" string="Marcar como Realizado" type="object" class="btn-success"
+                            invisible="state == 'realizado'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador,programado,realizado"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Referencia"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="veterinario_id"/>
+                            <field name="granja_id"/>
+                            <field name="fecha_planificada"/>
+                        </group>
+                        <group>
+                            <field name="descripcion"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_plan_vacunacion" model="ir.actions.act_window">
+        <field name="name">Planificaciones de Vacunación</field>
+        <field name="res_model">avicola.plan.vacunacion</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ======== PANEL DE CONTROL (DASHBOARD) ======== -->
+    <record id="view_avicola_dashboard_form" model="ir.ui.view">
+        <field name="name">avicola.dashboard.form</field>
+        <field name="model">avicola.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Panel de Control Avícola" create="false" delete="false">
+                <sheet>
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                        <div>
+                            <h2 class="mb-0 font-weight-bold" style="color: #431b47;">Gestión y Control Avícola</h2>
+                            <small class="text-muted">Resumen general de granjas, galpones y operaciones</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2 font-weight-bold">Filtrar Granja:</span>
+                            <field name="selected_granja_id" options="{'no_create': True}" class="me-2" style="min-width: 200px;"/>
+                        </div>
+                    </div>
+
+                    <!-- Cuadrícula de KPIs -->
+                    <div class="row g-3 mb-4">
+                        <!-- Tarjeta 1: Granjas -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #5c2261; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold" style="color: #e9b3f0;">Granjas</span>
+                                        <i class="fa fa-home fa-2x" style="color: #f3c2ff;"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_granjas" readonly="1"/></h2>
+                                    </div>
+                                    <button name="action_open_granjas" string="Ver Granjas →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 2: Galpones -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #5c2261; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold" style="color: #e9b3f0;">Galpones Activos</span>
+                                        <i class="fa fa-building-o fa-2x" style="color: #f3c2ff;"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_galpones" readonly="1"/></h2>
+                                    </div>
+                                    <button name="action_open_galpones" string="Ver Galpones →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 3: Población de Aves -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #5c2261; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold" style="color: #e9b3f0;">Población Aves</span>
+                                        <i class="fa fa-twitter fa-2x" style="color: #f3c2ff;"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_aves" readonly="1"/></h2>
+                                    </div>
+                                    <button name="action_open_galpones" string="Inventario Aves →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 4: Mortalidad % -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #a83232; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold" style="color: #ffd2d2;">Mortalidad (%)</span>
+                                        <i class="fa fa-heartbeat fa-2x" style="color: #ffe5e5;"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="mortalidad_percent" readonly="1"/>%</h2>
+                                    </div>
+                                    <button name="action_open_mortalidad" string="Ver Mortalidad →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 5: Pollitos Ingresados -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold text-muted">Pollitos Ingresados</span>
+                                        <i class="fa fa-truck fa-2x text-muted"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_ingresos_pollitos" readonly="1"/></h2>
+                                    </div>
+                                    <button name="action_open_distribuciones" string="Distribuciones →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 6: Aves Despachadas -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold text-muted">Aves Despachadas</span>
+                                        <i class="fa fa-sign-out fa-2x text-muted"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_salidas_matadero" readonly="1"/></h2>
+                                    </div>
+                                    <button name="action_open_salidas" string="Ver Despachos →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 7: Peso Total Despachado -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold text-muted">Kilos Despachados</span>
+                                        <i class="fa fa-balance-scale fa-2x text-muted"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="peso_total_despachado" readonly="1"/> kg</h2>
+                                    </div>
+                                    <button name="action_open_salidas" string="Rendimiento →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta 8: Veterinarios -->
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
+                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-uppercase small font-weight-bold text-muted">Veterinarios</span>
+                                        <i class="fa fa-user-md fa-2x text-muted"/>
+                                    </div>
+                                    <div class="my-2">
+                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_veterinarios" readonly="1"/></h2>
+                                    </div>
+                                    <button name="action_open_veterinarios" string="Ver Veterinarios →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enlaces Rápidos a Operaciones -->
+                    <div class="card border-0 shadow-sm p-3 mb-2 bg-light">
+                        <h5 class="mb-3 font-weight-bold text-dark"><i class="fa fa-bolt me-2"/>Accesos Directos</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button name="action_open_galpones" string="Gráficas de Galpones" type="object" class="btn btn-outline-primary" icon="fa-bar-chart"/>
+                            <button name="action_open_distribuciones" string="Registrar Distribución" type="object" class="btn btn-outline-success" icon="fa-truck"/>
+                            <button name="action_open_mortalidad" string="Registrar Mortalidad" type="object" class="btn btn-outline-danger" icon="fa-heartbeat"/>
+                            <button name="action_open_salidas" string="Nuevo Despacho Aves Vivas" type="object" class="btn btn-outline-info" icon="fa-file-text-o"/>
+                            <button name="action_open_planificaciones" string="Planes de Vacunación" type="object" class="btn btn-outline-secondary" icon="fa-calendar"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción Server para abrir el Dashboard siempre con el registro cargado -->
+    <record id="action_avicola_dashboard" model="ir.actions.server">
+        <field name="name">Panel de Control</field>
+        <field name="model_id" ref="model_avicola_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">
+dashboard = env['avicola.dashboard'].search([], limit=1)
+if not dashboard:
+    dashboard = env['avicola.dashboard'].create({'name': 'Panel de Control Avícola'})
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Panel de Control Avícola',
+    'res_model': 'avicola.dashboard',
+    'res_id': dashboard.id,
+    'view_mode': 'form',
+    'target': 'current',
+}
+        </field>
+    </record>
+
+
+    <!-- ======== MENUS PRINCIPALES ======== -->
     <menuitem id="menu_avicola_root" name="Gestión Avícola" sequence="10"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"
+              web_icon="gestion_avicola,static/description/icon.png"/>
 
     <menuitem id="menu_avicola_dashboard" name="Dashboard"
-              parent="menu_avicola_root" action="action_avicola_dashboard_window" sequence="5"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-
-    <menuitem id="menu_avicola_config" name="Configuración"
-              parent="menu_avicola_root" sequence="20"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_granja" name="Granjas"
-              parent="menu_avicola_config" action="action_avicola_granja" sequence="10"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_galpon" name="Galpones"
-              parent="menu_avicola_config" action="action_avicola_galpon" sequence="20"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+              parent="menu_avicola_root" action="action_avicola_dashboard" sequence="5"/>
 
     <menuitem id="menu_avicola_operaciones" name="Operaciones"
-              parent="menu_avicola_root" sequence="30"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+              parent="menu_avicola_root" sequence="10"/>
+
     <menuitem id="menu_avicola_distribucion" name="Distribución de Pollitos"
-              parent="menu_avicola_operaciones" action="action_avicola_distribucion" sequence="10"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+              parent="menu_avicola_operaciones" action="action_avicola_distribucion" sequence="10"/>
+
+    <menuitem id="menu_avicola_despacho" name="Despachos Aves Vivas"
+              parent="menu_avicola_operaciones" action="action_avicola_despacho" sequence="20"/>
+
+    <menuitem id="menu_avicola_salida" name="Salidas a Matadero"
+              parent="menu_avicola_operaciones" action="action_avicola_salida" sequence="25"/>
+
     <menuitem id="menu_avicola_mortalidad" name="Mortalidad de Aves"
-              parent="menu_avicola_operaciones" action="action_avicola_mortalidad" sequence="15"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <!-- `menu_avicola_salida` eliminado: las Salidas se gestionan ahora como Despachos -->
+              parent="menu_avicola_operaciones" action="action_avicola_mortalidad" sequence="30"/>
+
+    <menuitem id="menu_avicola_plan_vacunacion" name="Planificación de Vacunación"
+              parent="menu_avicola_operaciones" action="action_avicola_plan_vacunacion" sequence="40"/>
+
+    <menuitem id="menu_avicola_config" name="Configuración"
+              parent="menu_avicola_root" sequence="20"/>
+
+    <menuitem id="menu_avicola_granja" name="Granjas de Engorde"
+              parent="menu_avicola_config" action="action_avicola_granja" sequence="10"/>
+
+    <menuitem id="menu_avicola_galpon" name="Galpones"
+              parent="menu_avicola_config" action="action_avicola_galpon" sequence="20"/>
+
     <menuitem id="menu_avicola_veterinario" name="Veterinarios"
-              parent="menu_avicola_config" action="action_avicola_veterinario" sequence="30"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
-    <menuitem id="menu_avicola_plan_vacunacion" name="Planificaciones de Vacunación"
-              parent="menu_avicola_operaciones" action="action_avicola_plan_vacunacion" sequence="30"
-              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+              parent="menu_avicola_config" action="action_avicola_veterinario" sequence="30"/>
 
 </odoo>

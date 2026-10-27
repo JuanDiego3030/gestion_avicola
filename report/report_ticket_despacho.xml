@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_ticket_despacho" model="ir.actions.report">
+        <field name="name">Ticket de Despacho</field>
+        <field name="model">avicola.despacho</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">gestion_avicola.report_ticket_despacho_template</field>
+        <field name="report_file">gestion_avicola.report_ticket_despacho_template</field>
+        <field name="binding_model_id" ref="model_avicola_despacho"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_ticket_despacho_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="article page" style="font-family: monospace, sans-serif; font-size: 13px; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px dashed #444;">
+                    <!-- Cabecera -->
+                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h3 style="margin: 0; font-weight: bold;"><t t-esc="doc.company_name"/></h3>
+                        <p style="margin: 4px 0 0 0;"><strong>RIF:</strong> <t t-esc="doc.company_rif"/></p>
+                        <p style="margin: 2px 0 0 0; font-size: 11px;"><t t-esc="doc.company_direccion"/></p>
+                        <h4 style="margin: 10px 0 0 0; font-weight: bold; background: #eee; padding: 5px;">TICKET DE DESPACHO: <t t-esc="doc.name"/></h4>
+                    </div>
+
+                    <!-- Datos Generales -->
+                    <table style="width: 100%; margin-bottom: 15px; font-size: 12px; line-height: 1.6;">
+                        <tr>
+                            <td style="width: 50%;"><strong>Fecha:</strong> <t t-esc="doc.fecha.strftime('%d/%m/%Y %H:%M') if doc.fecha else ''"/></td>
+                            <td style="width: 50%;"><strong>Estado:</strong> <t t-esc="dict(doc._fields['estado'].selection).get(doc.estado)"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Granja:</strong> <t t-esc="doc.granja.name if doc.granja else ''"/></td>
+                            <td><strong>Galpón:</strong> <t t-esc="doc.galpon_id.name if doc.galpon_id else 'N/A'"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cliente:</strong> <t t-esc="doc.cliente or ''"/></td>
+                            <td><strong>Orden Compra Nro:</strong> <t t-esc="doc.orden_compra or 'S/N'"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- Transporte -->
+                    <div style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 8px 0; margin-bottom: 15px;">
+                        <h5 style="margin: 0 0 5px 0; font-weight: bold; text-transform: uppercase;">Datos del Transporte</h5>
+                        <table style="width: 100%; font-size: 12px; line-height: 1.5;">
+                            <tr>
+                                <td style="width: 50%;"><strong>Chofer:</strong> <t t-esc="doc.chofer or 'N/A'"/></td>
+                                <td style="width: 50%;"><strong>Placa:</strong> <t t-esc="doc.placa or 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cuadrilla:</strong> <t t-esc="doc.cuadrilla or 'N/A'"/></td>
+                                <td><strong>Supervisor:</strong> <t t-esc="doc.supervisor.name if doc.supervisor else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inicio Carga:</strong> <t t-esc="doc.inicio_carga.strftime('%H:%M') if doc.inicio_carga else 'N/A'"/></td>
+                                <td><strong>Final Carga:</strong> <t t-esc="doc.final_carga.strftime('%H:%M') if doc.final_carga else 'N/A'"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Datos de Carga y Pesaje -->
+                    <div style="margin-bottom: 20px;">
+                        <h5 style="margin: 0 0 8px 0; font-weight: bold; text-transform: uppercase;">Detalle de Carga y Peso</h5>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <thead>
+                                <tr style="background-color: #f2f2f2; border: 1px solid #ddd;">
+                                    <th style="padding: 6px; text-align: left; border: 1px solid #ddd;">Concepto</th>
+                                    <th style="padding: 6px; text-align: right; border: 1px solid #ddd;">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 6px; border: 1px solid #ddd;">Cantidad de Jaulas</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;"><t t-esc="doc.cant_jaulas"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 6px; border: 1px solid #ddd;">Pollos por Jaula</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;"><t t-esc="doc.pollos_por_jaula"/></td>
+                                </tr>
+                                <tr style="font-weight: bold; background-color: #fafafa;">
+                                    <td style="padding: 6px; border: 1px solid #ddd;">TOTAL AVES</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;"><t t-esc="doc.cantidad_aves"/> aves</td>
+                                </tr>
+                                <tr style="font-weight: bold; background-color: #fafafa;">
+                                    <td style="padding: 6px; border: 1px solid #ddd;">PESO NETO (KG)</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;"><t t-esc="'{0:,.2f}'.format(doc.peso_neto or 0)"/> kg</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 6px; border: 1px solid #ddd;">Peso Promedio por Ave</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;"><t t-esc="'{0:,.3f}'.format(doc.peso_promedio or 0)"/> kg</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 6px; border: 1px solid #ddd;">Pollo Mojado</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;"><t t-esc="dict(doc._fields['pollo_mojado'].selection).get(doc.pollo_mojado)"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 6px; border: 1px solid #ddd;">Precintos</td>
+                                    <td style="padding: 6px; text-align: right; border: 1px solid #ddd;">
+                                        <t t-if="doc.precinto_1">P1: <t t-esc="doc.precinto_1"/> </t>
+                                        <t t-if="doc.precinto_2">| P2: <t t-esc="doc.precinto_2"/> </t>
+                                        <t t-if="doc.precinto">| <t t-esc="doc.precinto"/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Firmas -->
+                    <div style="margin-top: 40px; border-top: 1px solid #aaa; padding-top: 10px;">
+                        <table style="width: 100%; text-align: center; font-size: 11px;">
+                            <tr>
+                                <td style="width: 50%;">
+                                    ______________________________<br/>
+                                    <strong>Despachado / Supervisor</strong>
+                                </td>
+                                <td style="width: 50%;">
+                                    ______________________________<br/>
+                                    <strong>Conforme / Chofer</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
