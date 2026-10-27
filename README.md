@@ -1,12 +1,25 @@
-# 🐔 Gestión Avícola (Odoo 19)
+# 🐔 Gestión Avícola (Multi-Versión: Odoo 19, 18 y 17)
 
-Módulo integral y profesional para la administración zootécnica, operativa y logística de granjas de engorde de pollos (*broilers*) desarrollado para **Odoo 19.0**.
+Módulo integral y profesional para la administración zootécnica, operativa y logística de granjas de engorde de pollos (*broilers*), con soporte para **Odoo 19.0, Odoo 18.0 y Odoo 17.0**.
+
+---
+
+## 🌿 Ramas por Versión de Odoo
+
+Este repositorio cuenta con ramas adaptadas a cada versión de Odoo:
+
+| Versión de Odoo | Rama en Git | Versión del Módulo | Características Técnicas de la Rama |
+|---|---|---|---|
+| **Odoo 19.0** | `master` | `19.0.1.0.0` | Vistas `<list>`, rutas dinámicas `/odoo`, API Odoo 19 (`post_init(env)`). |
+| **Odoo 18.0** | `18.0` | `18.0.1.0.0` | Vistas `<list>`, rutas dinámicas `/odoo`, API Odoo 18 (`post_init(env)`). |
+| **Odoo 17.0** | `17.0` | `17.0.1.0.0` | Vistas tradicionales `<tree>`, rutas `/web#action=...`, compatibilidad `(cr, registry)` y `groups_id`. |
 
 ---
 
 ## 📋 Índice
-1. [Descripción General](#-descripción-general)
-2. [Estructura y Módulos Funcionales](#-estructura-y-módulos-funcionales)
+1. [Ramas por Versión de Odoo](#-ramas-por-versión-de-odoo)
+2. [Descripción General](#-descripción-general)
+3. [Estructura y Módulos Funcionales](#-estructura-y-módulos-funcionales)
    - [Panel de Control Ejecutivo (Dashboard)](#1-panel-de-control-ejecutivo-dashboard)
    - [Granjas y Galpones](#2-granjas-y-galpones)
    - [Distribución de Pollitos BB](#3-distribución-de-pollitos-bb)
@@ -14,11 +27,11 @@ Módulo integral y profesional para la administración zootécnica, operativa y 
    - [Salidas a Matadero y Despachos](#5-salidas-a-matadero-y-despachos)
    - [Alimento, Silos y Nutrición](#6-alimento-silos-y-nutrición)
    - [Control Sanitario y Mortalidad](#7-control-sanitario-y-mortalidad)
-3. [Perfiles de Usuario y Seguridad](#-perfiles-de-usuario-y-seguridad)
-4. [Flujo Operativo Estándar](#-flujo-operativo-estándar)
-5. [Tutorial de Instalación y Despliegue](#-tutorial-de-instalación-y-despliegue)
-6. [Ejecución de Pruebas Unitarias](#-ejecución-de-pruebas-unitarias)
-7. [Licencia y Autoría](#-licencia-y-autoría)
+4. [Perfiles de Usuario y Seguridad](#-perfiles-de-usuario-y-seguridad)
+5. [Flujo Operativo Estándar](#-flujo-operativo-estándar)
+6. [Tutorial de Instalación y Despliegue](#-tutorial-de-instalación-y-despliegue)
+7. [Ejecución de Pruebas Unitarias](#-ejecución-de-pruebas-unitarias)
+8. [Licencia y Autoría](#-licencia-y-autoría)
 
 ---
 
@@ -170,17 +183,39 @@ flowchart TD
 ## 💻 Tutorial de Instalación y Despliegue
 
 ### Requisitos Previos
-* **Odoo:** Versión 19.0 (Community o Enterprise).
-* **Python:** 3.10 o superior (recomendado 3.12).
+* **Odoo:** Versión 19.0, 18.0 o 17.0 (Community o Enterprise).
+* **Python:** 3.10 o superior (Python 3.10 / 3.11 para Odoo 17, Python 3.11 / 3.12 para Odoo 18/19).
 * **Base de Datos:** PostgreSQL 14 o superior.
 
-### Paso 1: Clonar el Repositorio
-Ubica el repositorio dentro del directorio de addons personalizados de tu instancia de Odoo:
+### Paso 1: Clonar el Repositorio según tu Versión de Odoo
 
+Ubica tu terminal en el directorio de `custom_addons` de tu servidor Odoo y clona la rama correspondiente:
+
+#### Para Odoo 19.0 (Rama `master`):
 ```bash
 cd /ruta/a/tu/odoo/custom_addons/
-git clone https://github.com/JuanDiego3030/gestion_avicola.git
+git clone -b master https://github.com/JuanDiego3030/gestion_avicola.git
 ```
+
+#### Para Odoo 18.0 (Rama `18.0`):
+```bash
+cd /ruta/a/tu/odoo/custom_addons/
+git clone -b 18.0 https://github.com/JuanDiego3030/gestion_avicola.git
+```
+
+#### Para Odoo 17.0 (Rama `17.0`):
+```bash
+cd /ruta/a/tu/odoo/custom_addons/
+git clone -b 17.0 https://github.com/JuanDiego3030/gestion_avicola.git
+```
+
+> [!TIP]
+> Si ya habías clonado el repositorio y deseas cambiar de rama, simplemente navega a la carpeta del módulo y cambia de rama con:
+> ```bash
+> cd gestion_avicola
+> git fetch origin
+> git checkout 18.0   # o 17.0 / master
+> ```
 
 ### Paso 2: Verificar la Configuración de Odoo (`odoo.conf`)
 Asegúrate de que la ruta hacia `custom_addons` esté incluida en el parámetro `addons_path` de tu archivo `odoo.conf`:
