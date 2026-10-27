@@ -548,161 +548,32 @@
         <field name="name">avicola.dashboard.form</field>
         <field name="model">avicola.dashboard</field>
         <field name="arch" type="xml">
-            <form string="Panel de Control Avícola" create="false" delete="false">
-                <sheet>
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                        <div>
-                            <h2 class="mb-0 font-weight-bold" style="color: #431b47;">Gestión y Control Avícola</h2>
-                            <small class="text-muted">Resumen general de granjas, galpones y operaciones</small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="me-2 font-weight-bold">Filtrar Granja:</span>
-                            <field name="selected_granja_id" options="{'no_create': True}" class="me-2" style="min-width: 200px;"/>
-                        </div>
+            <form string="Dashboard Avícola" create="false" delete="false" class="o_avicola_dashboard_form">
+                <header class="d-flex justify-content-between align-items-center px-4 py-2 bg-white border-bottom shadow-sm">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-bold text-muted small"><i class="fa fa-filter me-1"></i>Filtrar por Granja:</span>
+                        <field name="selected_granja_id" options="{'no_create': True, 'no_open': True}" placeholder="Todas las granjas" style="min-width: 220px;"/>
                     </div>
-
-                    <!-- Cuadrícula de KPIs -->
-                    <div class="row g-3 mb-4">
-                        <!-- Tarjeta 1: Granjas -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #5c2261; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold" style="color: #e9b3f0;">Granjas</span>
-                                        <i class="fa fa-home fa-2x" style="color: #f3c2ff;"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_granjas" readonly="1"/></h2>
-                                    </div>
-                                    <button name="action_open_granjas" string="Ver Granjas →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 2: Galpones -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #5c2261; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold" style="color: #e9b3f0;">Galpones Activos</span>
-                                        <i class="fa fa-building-o fa-2x" style="color: #f3c2ff;"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_galpones" readonly="1"/></h2>
-                                    </div>
-                                    <button name="action_open_galpones" string="Ver Galpones →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 3: Población de Aves -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #5c2261; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold" style="color: #e9b3f0;">Población Aves</span>
-                                        <i class="fa fa-twitter fa-2x" style="color: #f3c2ff;"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_aves" readonly="1"/></h2>
-                                    </div>
-                                    <button name="action_open_galpones" string="Inventario Aves →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 4: Mortalidad % -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #a83232; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold" style="color: #ffd2d2;">Mortalidad (%)</span>
-                                        <i class="fa fa-heartbeat fa-2x" style="color: #ffe5e5;"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="mortalidad_percent" readonly="1"/>%</h2>
-                                    </div>
-                                    <button name="action_open_mortalidad" string="Ver Mortalidad →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 5: Pollitos Ingresados -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold text-muted">Pollitos Ingresados</span>
-                                        <i class="fa fa-truck fa-2x text-muted"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_ingresos_pollitos" readonly="1"/></h2>
-                                    </div>
-                                    <button name="action_open_distribuciones" string="Distribuciones →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 6: Aves Despachadas -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold text-muted">Aves Despachadas</span>
-                                        <i class="fa fa-sign-out fa-2x text-muted"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_salidas_matadero" readonly="1"/></h2>
-                                    </div>
-                                    <button name="action_open_salidas" string="Ver Despachos →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 7: Peso Total Despachado -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold text-muted">Kilos Despachados</span>
-                                        <i class="fa fa-balance-scale fa-2x text-muted"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="peso_total_despachado" readonly="1"/> kg</h2>
-                                    </div>
-                                    <button name="action_open_salidas" string="Rendimiento →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta 8: Veterinarios -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="card h-100 shadow-sm border-0 text-white" style="background-color: #3b3a4a; border-radius: 10px;">
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-uppercase small font-weight-bold text-muted">Veterinarios</span>
-                                        <i class="fa fa-user-md fa-2x text-muted"/>
-                                    </div>
-                                    <div class="my-2">
-                                        <h2 class="display-6 font-weight-bold mb-0 text-white"><field name="total_veterinarios" readonly="1"/></h2>
-                                    </div>
-                                    <button name="action_open_veterinarios" string="Ver Veterinarios →" type="object" class="btn btn-link p-0 text-start text-white text-decoration-none small"/>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button name="action_new_despacho" string="+ Nuevo Despacho" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
+                        <button name="action_new_distribucion" string="+ Distribuir Pollitos" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
+                        <button name="action_load_demo_data" string="⚡ Cargar Datos Demo" type="object" class="btn btn-sm btn-outline-success" style="border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
                     </div>
-
-                    <!-- Enlaces Rápidos a Operaciones -->
-                    <div class="card border-0 shadow-sm p-3 mb-2 bg-light">
-                        <h5 class="mb-3 font-weight-bold text-dark"><i class="fa fa-bolt me-2"/>Accesos Directos</h5>
-                        <div class="d-flex flex-wrap gap-2">
-                            <button name="action_open_galpones" string="Gráficas de Galpones" type="object" class="btn btn-outline-primary" icon="fa-bar-chart"/>
-                            <button name="action_open_distribuciones" string="Registrar Distribución" type="object" class="btn btn-outline-success" icon="fa-truck"/>
-                            <button name="action_open_mortalidad" string="Registrar Mortalidad" type="object" class="btn btn-outline-danger" icon="fa-heartbeat"/>
-                            <button name="action_open_salidas" string="Nuevo Despacho Aves Vivas" type="object" class="btn btn-outline-info" icon="fa-file-text-o"/>
-                            <button name="action_open_planificaciones" string="Planes de Vacunación" type="object" class="btn btn-outline-secondary" icon="fa-calendar"/>
-                        </div>
-                    </div>
+                </header>
+                <sheet style="max-width: 100% !important; width: 100% !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important;">
+                    <style>
+                        .o_avicola_dashboard_form .o_form_sheet_bg {
+                            background-color: #f1f5f9 !important;
+                            padding: 16px !important;
+                        }
+                        .o_avicola_dashboard_form .o_form_sheet {
+                            background: transparent !important;
+                            box-shadow: none !important;
+                            border: none !important;
+                            max-width: 100% !important;
+                        }
+                    </style>
+                    <field name="dashboard_html" widget="html" readonly="1" nolabel="1"/>
                 </sheet>
             </form>
         </field>
