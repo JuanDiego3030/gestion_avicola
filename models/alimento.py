@@ -270,6 +270,7 @@ class AvicolaAlimentoDashboard(models.Model):
         sanitize=False
     )
 
+    @api.depends('selected_granja_id')
     def _compute_metrics(self):
         Despacho = self.env['avicola.alimento.despacho']
         Consumo = self.env['avicola.alimento.consumo']
@@ -290,6 +291,7 @@ class AvicolaAlimentoDashboard(models.Model):
             promedios = consumos.mapped('consumo_ave_dia_gr')
             rec.consumo_promedio_dia_gr = (sum(promedios) / len(promedios)) if promedios else 0.0
 
+    @api.depends('selected_granja_id')
     def _compute_dashboard_html(self):
         for rec in self:
             rec._compute_metrics()
@@ -445,27 +447,8 @@ class AvicolaAlimentoDashboard(models.Model):
                     }}
                 }}
             </style>
-            <div class="avicola-dash-wrapper">
+            <div class="avicola-dash-wrapper" style="padding-top: 0 !important;">
                 
-                <!-- TOP HEADER -->
-                <div class="avicola-header-block" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-                    <div>
-                        <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; letter-spacing: -0.5px;">Gestión y Control de Alimento</h1>
-                        <p style="font-size: 13px; color: #64748b; margin: 0;">Supervisión de despachos a silos, stock disponible y consumo diario de aves.</p>
-                    </div>
-                    <div class="avicola-btn-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <a href="/web#action=gestion_avicola.action_avicola_alimento_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
-                            <i class="fa fa-plus"></i> Despachar Alimento
-                        </a>
-                        <a href="/web#action=gestion_avicola.action_avicola_alimento_consumo" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <i class="fa fa-cutlery"></i> Registrar Consumo
-                        </a>
-                        <a href="/web#action=gestion_avicola.action_avicola_alimento_graficas" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <i class="fa fa-bar-chart"></i> Analítica Dinámica
-                        </a>
-                    </div>
-                </div>
-
                 <!-- 4 TOP KPI CARDS -->
                 <div class="avicola-kpi-grid">
                     
