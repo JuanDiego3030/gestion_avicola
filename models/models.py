@@ -491,6 +491,7 @@ class AvicolaDashboard(models.Model):
             return veterinarian.granja_ids
         return self.env['avicola.granja'].search([])
 
+    @api.depends('selected_granja_id')
     def _compute_metrics(self):
         Dist = self.env['avicola.distribucion']
         Salida = self.env['avicola.salida']
@@ -548,6 +549,7 @@ class AvicolaDashboard(models.Model):
             else:
                 rec.mortalidad_percent = 0.0
 
+    @api.depends('selected_granja_id')
     def _compute_dashboard_html(self):
         for rec in self:
             rec._compute_metrics()
@@ -786,30 +788,8 @@ class AvicolaDashboard(models.Model):
                     }}
                 }}
             </style>
-            <div class="avicola-dash-wrapper">
+            <div class="avicola-dash-wrapper" style="padding-top: 0 !important;">
                 
-                <!-- TOP HEADER -->
-                <div class="avicola-header-block" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-                    <div>
-                        <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; letter-spacing: -0.5px;">Dashboard</h1>
-                        <p style="font-size: 13px; color: #64748b; margin: 0;">Planifica, supervisa y optimiza tus operaciones avícolas con facilidad.</p>
-                    </div>
-                    <div class="avicola-btn-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <a href="/odoo/action-gestion_avicola.action_avicola_despacho" class="btn btn-sm" style="background: #144D34; color: #ffffff; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(20,77,52,0.2);">
-                            <i class="fa fa-plus"></i> Nuevo Despacho
-                        </a>
-                        <a href="/odoo/action-gestion_avicola.action_avicola_distribucion" class="btn btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <i class="fa fa-truck"></i> Distribuir Pollitos
-                        </a>
-                        <a href="/odoo/action-gestion_avicola.action_avicola_proyeccion_lote" class="btn btn-sm" style="background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <i class="fa fa-line-chart"></i> Proyecciones Saca
-                        </a>
-                        <a href="/odoo/action-gestion_avicola.action_avicola_galpon" class="btn btn-sm" style="background: #ffffff; color: #144D34; border: 1.5px solid #a7f3d0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <i class="fa fa-th-large"></i> Ver Galpones
-                        </a>
-                    </div>
-                </div>
-
                 <!-- TOP 4 KPI CARDS -->
                 <div class="avicola-kpi-grid">
                     
