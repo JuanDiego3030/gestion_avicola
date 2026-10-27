@@ -375,11 +375,11 @@ class AvicolaDespacho(models.Model):
     def action_confirm_despacho(self):
         for rec in self:
             if rec.estado == 'confirmado':
-                raise UserError('Este despacho ya está confirmado.')
+                raise UserError('Esta salida a matadero ya está confirmada.')
             if rec.cantidad_aves <= 0:
                 raise UserError('La cantidad de aves debe ser mayor a cero.')
             
-            # Descontar del galpón si está seleccionado
+            # Descontar del galpón
             if rec.galpon_id:
                 if rec.galpon_id.cantidad_actual < rec.cantidad_aves:
                     raise UserError(
@@ -389,28 +389,6 @@ class AvicolaDespacho(models.Model):
                     )
                 rec.galpon_id.cantidad_actual -= rec.cantidad_aves
 
-            # Crear o actualizar salida vinculada
-            fecha_date = rec.fecha.date() if rec.fecha else fields.Date.today()
-            if not rec.salida_id:
-                salida = self.env['avicola.salida'].create({
-                    'fecha': fecha_date,
-                    'granja_id': rec.granja.id,
-                    'galpon_id': rec.galpon_id.id if rec.galpon_id else False,
-                    'cantidad': rec.cantidad_aves,
-                    'peso_total': rec.peso_neto or 0.0,
-                    'estado': 'confirmado',
-                })
-                rec.salida_id = salida.id
-            else:
-                rec.salida_id.write({
-                    'fecha': fecha_date,
-                    'granja_id': rec.granja.id,
-                    'galpon_id': rec.galpon_id.id if rec.galpon_id else False,
-                    'cantidad': rec.cantidad_aves,
-                    'peso_total': rec.peso_neto or 0.0,
-                    'estado': 'confirmado',
-                })
-
             rec.estado = 'confirmado'
 
     def action_borrador(self):
@@ -418,8 +396,6 @@ class AvicolaDespacho(models.Model):
             if rec.estado == 'confirmado':
                 if rec.galpon_id:
                     rec.galpon_id.cantidad_actual += rec.cantidad_aves
-                if rec.salida_id:
-                    rec.salida_id.estado = 'borrador'
             rec.estado = 'borrador'
 
     def action_cancelar(self):
@@ -427,9 +403,6 @@ class AvicolaDespacho(models.Model):
             if rec.estado == 'confirmado':
                 if rec.galpon_id:
                     rec.galpon_id.cantidad_actual += rec.cantidad_aves
-                if rec.salida_id:
-                    rec.salida_id.unlink()
-                    rec.salida_id = False
             rec.estado = 'cancelado'
 
     def action_print_ticket(self):

@@ -283,72 +283,28 @@
     </record>
 
 
-    <!-- ======== SALIDA A MATADERO ======== -->
-    <record id="view_avicola_salida_list" model="ir.ui.view">
-        <field name="name">avicola.salida.list</field>
-        <field name="model">avicola.salida</field>
-        <field name="arch" type="xml">
-            <list string="Salidas a Matadero" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
-                <field name="fecha"/>
-                <field name="granja_id"/>
-                <field name="galpon_id"/>
-                <field name="cantidad"/>
-                <field name="peso_total"/>
-                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="view_avicola_salida_form" model="ir.ui.view">
-        <field name="name">avicola.salida.form</field>
-        <field name="model">avicola.salida</field>
-        <field name="arch" type="xml">
-            <form string="Salida a Matadero">
-                <header>
-                    <button name="action_confirmar" string="Confirmar Salida" type="object"
-                            class="btn-primary" invisible="estado == 'confirmado'"/>
-                    <button name="action_borrador" string="Volver a Borrador" type="object"
-                            invisible="estado == 'borrador'"/>
-                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
-                </header>
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="fecha"/>
-                            <field name="granja_id"/>
-                            <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
-                        </group>
-                        <group>
-                            <field name="cantidad"/>
-                            <field name="peso_total"/>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
+    <!-- ======== ACCIONES DE SALIDAS / DESPACHOS UNIFICADAS ======== -->
     <record id="action_avicola_salida" model="ir.actions.act_window">
-        <field name="name">Salidas a Matadero</field>
-        <field name="res_model">avicola.salida</field>
+        <field name="name">Despachos a Matadero</field>
+        <field name="res_model">avicola.despacho</field>
         <field name="view_mode">list,form</field>
     </record>
 
 
-    <!-- ======== DESPACHO AVES VIVAS ======== -->
+    <!-- ======== DESPACHOS Y SALIDAS A MATADERO (UNIFICADO) ======== -->
     <record id="view_avicola_despacho_list" model="ir.ui.view">
         <field name="name">avicola.despacho.list</field>
         <field name="model">avicola.despacho</field>
         <field name="arch" type="xml">
-            <list string="Despachos de Aves Vivas" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
+            <list string="Salidas a Matadero / Despachos" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="granja"/>
                 <field name="galpon_id"/>
-                <field name="cliente"/>
-                <field name="cantidad_aves"/>
-                <field name="peso_neto"/>
-                <field name="peso_promedio"/>
+                <field name="cliente" string="Matadero / Cliente"/>
+                <field name="cantidad_aves" string="Aves"/>
+                <field name="peso_neto" string="Peso Neto (kg)"/>
+                <field name="peso_promedio" string="Peso Prom. (kg)"/>
                 <field name="chofer"/>
                 <field name="placa"/>
                 <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'" decoration-danger="estado == 'cancelado'"/>
@@ -360,9 +316,9 @@
         <field name="name">avicola.despacho.form</field>
         <field name="model">avicola.despacho</field>
         <field name="arch" type="xml">
-            <form string="Despacho de Aves Vivas">
+            <form string="Salida a Matadero / Despacho">
                 <header>
-                    <button name="action_confirm_despacho" string="Confirmar Despacho" type="object"
+                    <button name="action_confirm_despacho" string="Confirmar Salida a Matadero" type="object"
                             class="btn-primary" invisible="estado != 'borrador'"/>
                     <button name="action_print_ticket" string="Imprimir Ticket" type="object"
                             class="btn-secondary" icon="fa-print"/>
@@ -374,25 +330,25 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label for="name" string="Ticket Nro"/>
+                        <label for="name" string="Nro de Ticket / Salida"/>
                         <h1><field name="name"/></h1>
                     </div>
                     
                     <notebook>
-                        <page string="Datos de Operación">
+                        <page string="Datos de Salida / Matadero">
                             <group>
                                 <group string="Origen y Destino">
                                     <field name="fecha"/>
                                     <field name="granja"/>
                                     <field name="galpon_id" domain="[('granja_id', '=', granja)]"/>
-                                    <field name="cliente"/>
+                                    <field name="cliente" string="Matadero / Cliente"/>
                                     <field name="orden_compra"/>
                                 </group>
                                 <group string="Pesaje y Cantidades">
-                                    <field name="cantidad_aves"/>
+                                    <field name="cantidad_aves" string="Aves a Matadero"/>
                                     <field name="cant_jaulas"/>
                                     <field name="pollos_por_jaula"/>
-                                    <field name="peso_neto"/>
+                                    <field name="peso_neto" string="Peso Neto (kg)"/>
                                     <field name="peso_promedio" readonly="1"/>
                                     <field name="pollo_mojado" widget="radio"/>
                                 </group>
@@ -409,22 +365,19 @@
                                     <field name="final_carga"/>
                                 </group>
                             </group>
-                            <group string="Precintos">
+                            <group string="Precintos de Seguridad">
                                 <field name="precinto_1"/>
                                 <field name="precinto_2"/>
                                 <field name="precinto"/>
                             </group>
                         </page>
 
-                        <page string="Datos de la Empresa y Salida">
+                        <page string="Datos de la Empresa">
                             <group>
                                 <group string="Empresa Emisora">
                                     <field name="company_name" readonly="1"/>
                                     <field name="company_rif" readonly="1"/>
                                     <field name="company_direccion" readonly="1"/>
-                                </group>
-                                <group string="Registro de Salida">
-                                    <field name="salida_id" readonly="1"/>
                                 </group>
                             </group>
                         </page>
@@ -435,11 +388,11 @@
     </record>
 
     <record id="action_avicola_despacho" model="ir.actions.act_window">
-        <field name="name">Despachos de Aves Vivas</field>
+        <field name="name">Salidas a Matadero / Despachos</field>
         <field name="res_model">avicola.despacho</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Crea un nuevo despacho de aves listas para matadero.</p>
+            <p class="o_view_nocontent_smiling_face">Registra una salida o despacho de aves listas para matadero.</p>
         </field>
     </record>
 
@@ -614,11 +567,8 @@ action = {
     <menuitem id="menu_avicola_distribucion" name="Distribución de Pollitos"
               parent="menu_avicola_operaciones" action="action_avicola_distribucion" sequence="10"/>
 
-    <menuitem id="menu_avicola_despacho" name="Despachos Aves Vivas"
+    <menuitem id="menu_avicola_despacho" name="Salidas a Matadero"
               parent="menu_avicola_operaciones" action="action_avicola_despacho" sequence="20"/>
-
-    <menuitem id="menu_avicola_salida" name="Salidas a Matadero"
-              parent="menu_avicola_operaciones" action="action_avicola_salida" sequence="25"/>
 
     <menuitem id="menu_avicola_mortalidad" name="Mortalidad de Aves"
               parent="menu_avicola_operaciones" action="action_avicola_mortalidad" sequence="30"/>

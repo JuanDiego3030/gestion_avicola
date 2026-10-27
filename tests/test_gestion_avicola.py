@@ -132,10 +132,8 @@ class TestGestionAvicola(TransactionCase):
         self.assertEqual(despacho.estado, 'confirmado')
         # Galpón count decreased by 3000 -> 5000 remaining
         self.assertEqual(self.galpon_2.cantidad_actual, 5000)
-        self.assertTrue(despacho.salida_id)
-        self.assertEqual(despacho.salida_id.cantidad, 3000)
-        self.assertEqual(despacho.salida_id.peso_total, 6600.0)
-        self.assertEqual(despacho.salida_id.estado, 'confirmado')
+        self.assertEqual(despacho.cantidad_aves, 3000)
+        self.assertEqual(despacho.peso_neto, 6600.0)
 
         # Print ticket test (report generation)
         report_action = despacho.action_print_ticket()
