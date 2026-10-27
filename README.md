@@ -1,6 +1,6 @@
-# 🐔 Gestión Avícola (Multi-Versión: Odoo 19, 18 y 17)
+# 🐔 Gestión Avícola (Multi-Versión: Odoo 20, 19, 18 y 17)
 
-Módulo integral y profesional para la administración zootécnica, operativa y logística de granjas de engorde de pollos (*broilers*), con soporte para **Odoo 19.0, Odoo 18.0 y Odoo 17.0**.
+Módulo integral y profesional para la administración zootécnica, operativa y logística de granjas de engorde de pollos (*broilers*), con soporte para **Odoo 20.0, Odoo 19.0, Odoo 18.0 y Odoo 17.0**.
 
 ---
 
@@ -10,7 +10,8 @@ Este repositorio cuenta con ramas adaptadas a cada versión de Odoo:
 
 | Versión de Odoo | Rama en Git | Versión del Módulo | Características Técnicas de la Rama |
 |---|---|---|---|
-| **Odoo 19.0** | `master` | `19.0.1.0.0` | Vistas `<list>`, rutas dinámicas `/odoo`, API Odoo 19 (`post_init(env)`). |
+| **Odoo 20.0** | `20.0` | `20.0.1.0.0` | Próxima generación, vistas `<list>`, rutas `/odoo`, API moderna. |
+| **Odoo 19.0** | `master` / `19.0` | `19.0.1.0.0` | Vistas `<list>`, rutas dinámicas `/odoo`, API Odoo 19 (`post_init(env)`). |
 | **Odoo 18.0** | `18.0` | `18.0.1.0.0` | Vistas `<list>`, rutas dinámicas `/odoo`, API Odoo 18 (`post_init(env)`). |
 | **Odoo 17.0** | `17.0` | `17.0.1.0.0` | Vistas tradicionales `<tree>`, rutas `/web#action=...`, compatibilidad `(cr, registry)` y `groups_id`. |
 
@@ -191,7 +192,13 @@ flowchart TD
 
 Ubica tu terminal en el directorio de `custom_addons` de tu servidor Odoo y clona la rama correspondiente:
 
-#### Para Odoo 19.0 (Rama `master`):
+#### Para Odoo 20.0 (Rama `20.0`):
+```bash
+cd /ruta/a/tu/odoo/custom_addons/
+git clone -b 20.0 https://github.com/JuanDiego3030/gestion_avicola.git
+```
+
+#### Para Odoo 19.0 (Rama `master` o `19.0`):
 ```bash
 cd /ruta/a/tu/odoo/custom_addons/
 git clone -b master https://github.com/JuanDiego3030/gestion_avicola.git
