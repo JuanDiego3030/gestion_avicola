@@ -337,7 +337,8 @@
     <menuitem id="menu_avicola_proyecciones_calendar" name="Calendario de Sacas"
               parent="menu_avicola_proyecciones_root" action="action_avicola_proyeccion_lote_calendar" sequence="20"/>
 
-    <menuitem id="menu_avicola_proyecciones_config" name="Configuración de Parámetros"
-              parent="menu_avicola_proyecciones_root" action="action_avicola_proyeccion_config" sequence="30"/>
+    <!-- Configuración de Saca ubicada dentro del menú general de Configuración -->
+    <menuitem id="menu_avicola_proyecciones_config" name="Parámetros de Saca"
+              parent="menu_avicola_config" action="action_avicola_proyeccion_config" sequence="40"/>
 
 </odoo>
