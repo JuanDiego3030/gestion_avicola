@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======== TIPOS DE ALIMENTO ======== -->
+    <record id="view_avicola_alimento_tipo_list" model="ir.ui.view">
+        <field name="name">avicola.alimento.tipo.list</field>
+        <field name="model">avicola.alimento.tipo</field>
+        <field name="arch" type="xml">
+            <list string="Tipos de Alimento Balanceado">
+                <field name="codigo"/>
+                <field name="name"/>
+                <field name="fase" widget="badge"/>
+                <field name="proteina_pct"/>
+                <field name="energia_kcal"/>
+                <field name="costo_por_kg"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_alimento_tipo_form" model="ir.ui.view">
+        <field name="name">avicola.alimento.tipo.form</field>
+        <field name="model">avicola.alimento.tipo</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de Alimento">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre de la Fórmula"/>
+                        <h1><field name="name" placeholder="Ej. Iniciador Pollito BB Plus"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="codigo"/>
+                            <field name="fase"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="proteina_pct"/>
+                            <field name="energia_kcal"/>
+                            <field name="costo_por_kg"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Especificaciones">
+                            <field name="descripcion" placeholder="Composición nutricional, ingredientes principales, recomendaciones de dosificación..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_avicola_alimento_tipo" model="ir.actions.act_window">
+        <field name="name">Tipos y Fórmulas de Alimento</field>
+        <field name="res_model">avicola.alimento.tipo</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ======== DESPACHO DE ALIMENTO A GRANJAS ======== -->
+    <record id="view_avicola_alimento_despacho_list" model="ir.ui.view">
+        <field name="name">avicola.alimento.despacho.list</field>
+        <field name="model">avicola.alimento.despacho</field>
+        <field name="arch" type="xml">
+            <list string="Despachos de Alimento" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'" decoration-danger="estado == 'cancelado'">
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="tipo_alimento_id"/>
+                <field name="cantidad_kg" sum="Total kg"/>
+                <field name="cantidad_ton" sum="Total Ton"/>
+                <field name="presentacion"/>
+                <field name="chofer"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'" decoration-danger="estado == 'cancelado'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_alimento_despacho_form" model="ir.ui.view">
+        <field name="name">avicola.alimento.despacho.form</field>
+        <field name="model">avicola.alimento.despacho</field>
+        <field name="arch" type="xml">
+            <form string="Despacho de Alimento a Granja">
+                <header>
+                    <button name="action_confirmar" string="Confirmar e Ingresar a Silos" type="object"
+                            class="btn-primary" invisible="estado == 'confirmado'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="estado == 'borrador'"/>
+                    <button name="action_cancelar" string="Cancelar" type="object"
+                            invisible="estado == 'cancelado'"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nro de Despacho"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Destino">
+                            <field name="fecha"/>
+                            <field name="granja_id"/>
+                            <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                            <field name="tipo_alimento_id"/>
+                            <field name="lote_alimento"/>
+                        </group>
+                        <group string="Cantidades y Presentación">
+                            <field name="presentacion" widget="radio"/>
+                            <field name="cantidad_kg"/>
+                            <field name="cantidad_ton" readonly="1"/>
+                            <field name="cantidad_sacos" invisible="presentacion != 'sacos'"/>
+                            <field name="costo_total" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Transporte y Planta">
+                        <group>
+                            <field name="planta_origen"/>
+                            <field name="chofer"/>
+                            <field name="placa"/>
+                        </group>
+                        <group>
+                            <field name="observaciones"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_avicola_alimento_despacho_graph" model="ir.ui.view">
+        <field name="name">avicola.alimento.despacho.graph</field>
+        <field name="model">avicola.alimento.despacho</field>
+        <field name="arch" type="xml">
+            <graph string="Despachos de Alimento a Granjas" type="bar">
+                <field name="granja_id"/>
+                <field name="tipo_alimento_id"/>
+                <field name="cantidad_kg" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_avicola_alimento_despacho_pivot" model="ir.ui.view">
+        <field name="name">avicola.alimento.despacho.pivot</field>
+        <field name="model">avicola.alimento.despacho</field>
+        <field name="arch" type="xml">
+            <pivot string="Resumen de Despachos a Silos">
+                <field name="granja_id" type="row"/>
+                <field name="tipo_alimento_id" type="col"/>
+                <field name="cantidad_kg" type="measure"/>
+                <field name="cantidad_ton" type="measure"/>
+                <field name="costo_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_avicola_alimento_despacho" model="ir.actions.act_window">
+        <field name="name">Despacho de Alimento a Granjas</field>
+        <field name="res_model">avicola.alimento.despacho</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Registra un nuevo despacho de alimento hacia los silos de las granjas.</p>
+        </field>
+    </record>
+
+
+    <!-- ======== CONSUMO DIARIO DE ALIMENTO ======== -->
+    <record id="view_avicola_alimento_consumo_list" model="ir.ui.view">
+        <field name="name">avicola.alimento.consumo.list</field>
+        <field name="model">avicola.alimento.consumo</field>
+        <field name="arch" type="xml">
+            <list string="Consumo Diario de Alimento" decoration-success="estado == 'confirmado'" decoration-muted="estado == 'borrador'">
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="granja_id"/>
+                <field name="galpon_id"/>
+                <field name="tipo_alimento_id"/>
+                <field name="cantidad_kg" sum="Total Consumido kg"/>
+                <field name="cantidad_aves"/>
+                <field name="consumo_ave_dia_gr" avg="Promedio g/ave/día"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'confirmado'" decoration-warning="estado == 'borrador'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_avicola_alimento_consumo_form" model="ir.ui.view">
+        <field name="name">avicola.alimento.consumo.form</field>
+        <field name="model">avicola.alimento.consumo</field>
+        <field name="arch" type="xml">
+            <form string="Consumo Diario de Alimento">
+                <header>
+                    <button name="action_confirmar" string="Confirmar y Descontar de Silo" type="object"
+                            class="btn-primary" invisible="estado == 'confirmado'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="estado == 'borrador'"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,confirmado"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Referencia"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Ubicación y Fecha">
+                            <field name="fecha"/>
+                            <field name="granja_id"/>
+                            <field name="galpon_id" domain="[('granja_id', '=', granja_id)]"/>
+                            <field name="tipo_alimento_id"/>
+                        </group>
+                        <group string="Cantidades y Ratio de Consumo">
+                            <field name="cantidad_kg"/>
+                            <field name="cantidad_aves"/>
+                            <field name="consumo_ave_dia_gr" readonly="1"/>
+                            <field name="observaciones"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Gráfica Dinámica de Consumo por Galpón y Fecha -->
+    <record id="view_avicola_alimento_consumo_graph" model="ir.ui.view">
+        <field name="name">avicola.alimento.consumo.graph</field>
+        <field name="model">avicola.alimento.consumo</field>
+        <field name="arch" type="xml">
+            <graph string="Evolución Dinámica de Consumo de Alimento" type="line" sample="1">
+                <field name="fecha" interval="day"/>
+                <field name="galpon_id"/>
+                <field name="cantidad_kg" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Gráfica de Distribución por Tipo de Alimento (Torta/Pie) -->
+    <record id="view_avicola_alimento_consumo_pie" model="ir.ui.view">
+        <field name="name">avicola.alimento.consumo.pie</field>
+        <field name="model">avicola.alimento.consumo</field>
+        <field name="arch" type="xml">
+            <graph string="Consumo por Fórmula / Tipo de Alimento" type="pie">
+                <field name="tipo_alimento_id"/>
+                <field name="cantidad_kg" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vista Pivot Multidimensional de Consumos -->
+    <record id="view_avicola_alimento_consumo_pivot" model="ir.ui.view">
+        <field name="name">avicola.alimento.consumo.pivot</field>
+        <field name="model">avicola.alimento.consumo</field>
+        <field name="arch" type="xml">
+            <pivot string="Matriz de Consumo de Alimento" sample="1">
+                <field name="granja_id" type="row"/>
+                <field name="galpon_id" type="row"/>
+                <field name="tipo_alimento_id" type="col"/>
+                <field name="cantidad_kg" type="measure"/>
+                <field name="consumo_ave_dia_gr" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_avicola_alimento_consumo" model="ir.actions.act_window">
+        <field name="name">Consumo Diario de Alimento</field>
+        <field name="res_model">avicola.alimento.consumo</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Registra el consumo diario de alimento en los galpones.</p>
+        </field>
+    </record>
+
+    <!-- Acción dedicada exclusivamente a las Gráficas Dinámicas de Consumo -->
+    <record id="action_avicola_alimento_graficas" model="ir.actions.act_window">
+        <field name="name">Analítica Dinámica de Consumo</field>
+        <field name="res_model">avicola.alimento.consumo</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+
+    <!-- ======== DASHBOARD DE ALIMENTO (DONEZO STYLE) ======== -->
+    <record id="view_avicola_alimento_dashboard_form" model="ir.ui.view">
+        <field name="name">avicola.alimento.dashboard.form</field>
+        <field name="model">avicola.alimento.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard de Alimento" create="false" delete="false" class="o_avicola_dashboard_form">
+                <header class="d-flex justify-content-between align-items-center px-4 py-2 bg-white border-bottom shadow-sm">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-bold text-muted small"><i class="fa fa-filter me-1"></i>Filtrar Granja:</span>
+                        <field name="selected_granja_id" options="{'no_create': True, 'no_open': True}" placeholder="Todas las granjas" style="min-width: 220px;"/>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button name="action_new_despacho_alimento" string="+ Despachar Alimento" type="object" class="btn btn-sm text-white" style="background-color: #144D34; border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
+                        <button name="action_new_consumo_alimento" string="+ Registrar Consumo" type="object" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
+                        <button name="action_load_demo_alimento" string="⚡ Cargar Demo Alimento" type="object" class="btn btn-sm btn-outline-success" style="border-radius: 999px; font-weight: 600; padding: 6px 16px;"/>
+                    </div>
+                </header>
+                <sheet style="max-width: 100% !important; width: 100% !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important;">
+                    <style>
+                        .o_avicola_dashboard_form .o_form_sheet_bg {
+                            background-color: #f1f5f9 !important;
+                            padding: 16px !important;
+                        }
+                        .o_avicola_dashboard_form .o_form_sheet {
+                            background: transparent !important;
+                            box-shadow: none !important;
+                            border: none !important;
+                            max-width: 100% !important;
+                        }
+                    </style>
+                    <field name="dashboard_html" widget="html" readonly="1" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción Server para abrir el Dashboard de Alimento -->
+    <record id="action_avicola_alimento_dashboard" model="ir.actions.server">
+        <field name="name">Panel de Alimento</field>
+        <field name="model_id" ref="model_avicola_alimento_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">
+dashboard = env['avicola.alimento.dashboard'].search([], limit=1)
+if not dashboard:
+    dashboard = env['avicola.alimento.dashboard'].create({'name': 'Control de Alimento y Nutrición'})
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Control de Alimento y Nutrición',
+    'res_model': 'avicola.alimento.dashboard',
+    'res_id': dashboard.id,
+    'view_mode': 'form',
+    'target': 'current',
+}
+        </field>
+    </record>
+
+
+    <!-- ======== MENUS DE GESTIÓN DE ALIMENTO ======== -->
+    <menuitem id="menu_avicola_alimento_root" name="Alimento y Silos"
+              parent="menu_avicola_root" sequence="15"
+              groups="gestion_avicola.group_veterinario,gestion_avicola.group_veterinario_manager,base.group_system"/>
+
+    <menuitem id="menu_avicola_alimento_dash" name="Dashboard Alimento"
+              parent="menu_avicola_alimento_root" action="action_avicola_alimento_dashboard" sequence="5"/>
+
+    <menuitem id="menu_avicola_alimento_despacho" name="Despachos de Alimento"
+              parent="menu_avicola_alimento_root" action="action_avicola_alimento_despacho" sequence="10"/>
+
+    <menuitem id="menu_avicola_alimento_consumo" name="Consumo Diario"
+              parent="menu_avicola_alimento_root" action="action_avicola_alimento_consumo" sequence="20"/>
+
+    <menuitem id="menu_avicola_alimento_graficas" name="Gráficas Dinámicas de Consumo"
+              parent="menu_avicola_alimento_root" action="action_avicola_alimento_graficas" sequence="25"/>
+
+    <menuitem id="menu_avicola_alimento_tipo" name="Tipos de Alimento"
+              parent="menu_avicola_alimento_root" action="action_avicola_alimento_tipo" sequence="30"/>
+
+</odoo>

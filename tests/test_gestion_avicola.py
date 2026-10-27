@@ -99,7 +99,7 @@ class TestGestionAvicola(TransactionCase):
             mort_excess.action_confirmar()
 
     def test_04_despacho_aves_vivas(self):
-        """Test dispatching live birds to slaughterhouse discounts inventory and generates salida"""
+        """Test dispatching live birds to slaughterhouse discounts inventory"""
         # Load 8000 birds into galpon_2
         dist = self.env['avicola.distribucion'].create({
             'lote_incubadora': 'INC-2026-003',
@@ -146,3 +146,58 @@ class TestGestionAvicola(TransactionCase):
         dashboard._compute_metrics()
         self.assertGreaterEqual(dashboard.total_granjas, 1)
         self.assertGreaterEqual(dashboard.total_galpones, 2)
+
+    def test_06_alimento_despacho_y_consumo(self):
+        """Test food dispatch to silos, stock update and daily consumption deduction"""
+        # Create food type
+        tipo_alimento = self.env['avicola.alimento.tipo'].create({
+            'name': 'Iniciador Pellets Test',
+            'codigo': 'TST-INI',
+            'fase': 'inicio',
+            'proteina_pct': 21.0,
+            'costo_por_kg': 0.45,
+        })
+
+        # Despacho de 8,000 kg a la granja
+        despacho = self.env['avicola.alimento.despacho'].create({
+            'granja_id': self.granja.id,
+            'tipo_alimento_id': tipo_alimento.id,
+            'cantidad_kg': 8000.0,
+            'presentacion': 'granel',
+        })
+        self.assertEqual(despacho.estado, 'borrador')
+        despacho.action_confirmar()
+        self.assertEqual(despacho.estado, 'confirmado')
+
+        # Stock en la granja debe ser 8,000 kg
+        self.assertEqual(self.granja.total_alimento_recibido_kg, 8000.0)
+        self.assertEqual(self.granja.stock_alimento_kg, 8000.0)
+
+        # Consumo de 1,200 kg en Galpón 01
+        consumo = self.env['avicola.alimento.consumo'].create({
+            'granja_id': self.granja.id,
+            'galpon_id': self.galpon_1.id,
+            'tipo_alimento_id': tipo_alimento.id,
+            'cantidad_kg': 1200.0,
+            'cantidad_aves': 10000,
+        })
+        # 1,200 kg * 1000 / 10000 aves = 120 g/ave/día
+        self.assertAlmostEqual(consumo.consumo_ave_dia_gr, 120.0, places=1)
+
+        consumo.action_confirmar()
+        self.assertEqual(consumo.estado, 'confirmado')
+
+        # Stock en granja ahora debe ser 8000 - 1200 = 6800 kg
+        self.assertEqual(self.granja.total_alimento_consumido_kg, 1200.0)
+        self.assertEqual(self.granja.stock_alimento_kg, 6800.0)
+        self.assertEqual(self.galpon_1.total_alimento_consumido_kg, 1200.0)
+
+        # Intentar consumir más de lo disponible en stock (ej. 10,000 kg) debe dar UserError
+        consumo_exceso = self.env['avicola.alimento.consumo'].create({
+            'granja_id': self.granja.id,
+            'galpon_id': self.galpon_1.id,
+            'tipo_alimento_id': tipo_alimento.id,
+            'cantidad_kg': 10000.0,
+        })
+        with self.assertRaises(UserError):
+            consumo_exceso.action_confirmar()
